@@ -3,10 +3,9 @@ package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
@@ -14,6 +13,9 @@ import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.MuralReposit
 
 @Controller
 public class MuralController {
+	
+	@Value("${map.key}")
+	String mapkey;
 	
 	@Autowired
 	MuralRepository mr;
@@ -27,7 +29,10 @@ public class MuralController {
 	@RequestMapping("/art_near_me")
 	public ModelAndView displayArt() {
 		List<Mural> murals = mr.findAll(); 
-		return new ModelAndView("artnearme", "murals", murals); 
+		ModelAndView mv = new ModelAndView("artnearme", "murals", murals); 
+		mv.addObject("mapkey", mapkey);
+		
+		return mv;
 		
 	}
 }
