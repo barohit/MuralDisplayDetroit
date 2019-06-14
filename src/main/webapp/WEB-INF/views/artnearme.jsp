@@ -14,7 +14,6 @@ var centerCords = {
 	lng:-83.045
 };
 
-
 var markersOnMap =[{
 	name: "#WhatLiftsYou Mural",
 	LatLng:[{lat:42.3356154,
@@ -123,7 +122,7 @@ function initMap(){
 <div id="map" style="width:100%;height:420px;"></div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}&callback=myMap"></script>
-<font size="1">by Nick TenBrink</font>
+<font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink</font>
 
 </body>
 </html>
