@@ -35,7 +35,7 @@ window.onload = function(){
 function addMarkerInfo(){
 	for (var i = 0; i < markersOnMap.length; i++){
 		
-		var contentStr ="<div><img src="+markersOnMap[i].image+" style ='height:150px'></div><br>"+ markersOnMap[i].name;
+		var contentStr ="<div><img src="+markersOnMap[i].image+" style ='height:175px'></div><br>"+ markersOnMap[i].name;
 		const marker = new google.maps.Marker({
 			position: markersOnMap[i].LatLng[0],
 			map: map
