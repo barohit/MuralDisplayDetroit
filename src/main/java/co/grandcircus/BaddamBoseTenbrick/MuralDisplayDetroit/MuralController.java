@@ -61,4 +61,9 @@ public class MuralController {
 		}
 	}
 	
+	@RequestMapping("/create")
+	public ModelAndView createUser() {
+		return new ModelAndView("adduser"); 
+	}
+	
 }
