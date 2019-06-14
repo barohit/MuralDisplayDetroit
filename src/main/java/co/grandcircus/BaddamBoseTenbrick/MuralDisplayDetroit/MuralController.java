@@ -31,6 +31,7 @@ public class MuralController {
 
 		return new ModelAndView("Index");
 	}
+	
 
 	@RequestMapping("/art_near_me")
 	public ModelAndView displayArt() {
@@ -68,6 +69,12 @@ public class MuralController {
 	@RequestMapping("/display_all_art")
 	public ModelAndView displayAllArt() {
 		return new ModelAndView("displayallart"); 
+	}
+	
+	@RequestMapping("/confirmation")
+	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
+		ur.save(new User(username, password)); 
+		return new ModelAndView("confirmationpage"); 
 	}
 	
 }

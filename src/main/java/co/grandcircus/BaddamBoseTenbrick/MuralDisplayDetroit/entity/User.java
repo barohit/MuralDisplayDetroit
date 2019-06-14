@@ -38,6 +38,12 @@ public class User {
 		this.password = password;
 		this.muralids = muralids;
 	}
+	
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
 
 	public String getUsername() {
 		return username;
