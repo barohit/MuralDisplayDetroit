@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,14 @@ var centerCords = {
 	lng:-83.045
 };
 
-var markersOnMap =[{
+for (var i = 0; i < ${murals}.length; i++) {
+	markersOnMap.push({name:${murals}[i].name, LatLng:[{lat:${murals}[i].latitude,
+		lng:${murals}[i].longitude}], 
+	image: "https://i.imgur.com/mjJSRfI.jpg style = 'width: 280px; height: 150px'"}
+	)
+}
+
+/* var markersOnMap =[{
 	name: "#WhatLiftsYou Mural",
 	LatLng:[{lat:42.3356154,
 		lng:-83.0497705
@@ -52,7 +60,7 @@ var markersOnMap =[{
 	image:"https://www.modeldmedia.com/Images/Features/issue610/2.jpg style = 'width:350px; height:300px'"
 }
 
-];
+]; */
 
 window.onload = function(){
 	initMap();
