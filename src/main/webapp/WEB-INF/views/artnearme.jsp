@@ -9,63 +9,29 @@
 
 <script>
 var map;
+var markersOnMap=[];
 var InforObj=[];
 var centerCords = {
 	lat:42.341,
 	lng:-83.045
 };
 
-for (var i = 0; i < ${murals}.length; i++) {
-	markersOnMap.push({name:${murals}[i].name, LatLng:[{lat:${murals}[i].latitude,
-		lng:${murals}[i].longitude}], 
-	image: "https://i.imgur.com/mjJSRfI.jpg style = 'width: 280px; height: 150px'"}
-	)
-}
+function initMarkers(){
+	/* add each mural from database to list */
+ 	<c:forEach items="${murals}" var="m">
+ 	
+ 		markersOnMap.push({name:"${m.name}", LatLng:[{lat:${m.latitude},lng:${m.longitude}}],
+ 				image:"${m.imgloc}", artist:"${m.artistname}", id:${m.muralid}});   
+	</c:forEach>	
+	
+	} 
 
-/* var markersOnMap =[{
-	name: "#WhatLiftsYou Mural",
-	LatLng:[{lat:42.3356154,
-		lng:-83.0497705
-	}],
-	image: "https://i.imgur.com/mjJSRfI.jpg style = 'width: 280px; height: 150px'"
-},
-{name: "Whale Mural @ Broderick Towers",
-	LatLng:[{
-		lat:42.3360824,
-		lng:-83.0498275
-	}],
-	image: "https://www.wyland.com/media/20110209104734%20.jpg style = 'width:150px; height:200px'"
-
-	},
-	{name:"Pat Perry Mural",
-	LatLng:[{
-		lat:42.3274354,
-		lng:-83.079290
-	}],
-	image:"http://patperry.net/cache/images/local/uploads/projects/sw_mural_patperryPanorama2_sa_3193_1000_40.jpg style = 'width:500px; height:150px'"
-},
-	{name: "Bernal Perez life of pi mural",
-	LatLng:[{
-		lat:42.3155905,
-		lng:-83.1139593
-	}],
-	image:"https://www.modeldmedia.com/Images/Features/issue610/1.jpg style = 'width:350px; height:250px'"
-
-},
-	{name:"ellen rutt cubism mural",
-	LatLng:[{
-		lat:42.3338953,
-		lng:-83.0992146 
-	}],
-	image:"https://www.modeldmedia.com/Images/Features/issue610/2.jpg style = 'width:350px; height:300px'"
-}
-
-]; */
-
+//initialize map 
 window.onload = function(){
 	initMap();
 };
 
+//adds markers from list to map
 function addMarkerInfo(){
 	for (var i = 0; i < markersOnMap.length; i++){
 		
@@ -84,7 +50,8 @@ function addMarkerInfo(){
 			InforObj[0] = infowindow;
 			map.setZoom(15);
 	   		map.setCenter(marker.getPosition());
-		});
+		});	
+		//opens info window on mouseover
 		     marker.addListener('mouseover', function () {
                     closeOtherInfo();
                     infowindow.open(marker.get('map'), marker);
@@ -99,7 +66,7 @@ function addMarkerInfo(){
 	}
 
 }
-
+//only 1 infowindow open at a time
 function closeOtherInfo(){
 	if (InforObj.length>0){
 		  /* detach the info-window from the marker ... undocumented in the API docs */
@@ -111,12 +78,13 @@ function closeOtherInfo(){
 		}
 	}
 
-
+//initialize map
 function initMap(){
 	map = new google.maps.Map(document.getElementById('map'),{
 		zoom:12,
 		center: centerCords
 	});
+	initMarkers();
 	addMarkerInfo();
 }
 
@@ -129,7 +97,7 @@ function initMap(){
 
 <div id="map" style="width:100%;height:420px;"></div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}"></script>
 <font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink</font>
 
 </body>
