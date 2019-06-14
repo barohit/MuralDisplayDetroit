@@ -20,8 +20,8 @@ function initMarkers(){
 	/* add each mural from database to list */
  	<c:forEach items="${murals}" var="m">
  	
- 		markersOnMap.push({name:"${m.name}", LatLng:[{lat:${m.latitude},lng:${m.longitude}}],
- 				image:"${m.imgloc}", artist:"${m.artistname}", id:${m.muralid}});   
+ 		markersOnMap.push({name:"${m.name}",LatLng:[{lat:${m.latitude},lng:${m.longitude}}],
+ 				image:"${m.imgloc}", artist:"${m.artistname}", id:${m.muralid}});
 	</c:forEach>	
 	
 	} 
@@ -35,7 +35,7 @@ window.onload = function(){
 function addMarkerInfo(){
 	for (var i = 0; i < markersOnMap.length; i++){
 		
-		var contentStr ="<div><img src="+markersOnMap[i].image+"></div><br>"+ markersOnMap[i].name;
+		var contentStr ="<div><img src="+markersOnMap[i].image+" style ='height:150px'></div><br>"+ markersOnMap[i].name;
 		const marker = new google.maps.Marker({
 			position: markersOnMap[i].LatLng[0],
 			map: map
