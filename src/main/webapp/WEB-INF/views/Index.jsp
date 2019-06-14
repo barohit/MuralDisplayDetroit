@@ -12,7 +12,7 @@
 
 <p><a href="/login">Login</a>	</p>
 <p><a href="/art_near_me">Art Near Me</a></p>
-<p><a href="/display_art">Display All Art</a>	</p>
+<p><a href="/display_all_art">Display All Art</a>	</p>
 <p><a href="/upload_art">Upload Art</a>	</p>
 
 </body>

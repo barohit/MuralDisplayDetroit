@@ -27,9 +27,18 @@ public class MuralController {
 	}
 
 	@RequestMapping("/art_near_me")
-	public ModelAndView displayArt() {
+	public ModelAndView artNear() {
 		List<Mural> murals = mr.findAll(); 
 		ModelAndView mv = new ModelAndView("artnearme", "murals", murals); 
+		mv.addObject("mapkey", mapkey);
+		
+		return mv;
+		
+	}
+	@RequestMapping("/display_all_art")
+	public ModelAndView displayArt() {
+		
+		ModelAndView mv = new ModelAndView("displayallart");//, "murals", murals); 
 		mv.addObject("mapkey", mapkey);
 		
 		return mv;
