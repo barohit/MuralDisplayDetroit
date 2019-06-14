@@ -79,7 +79,7 @@ public class MuralController {
 		return new ModelAndView("confirmationpage"); 
 	}
 	
-	@RequestMapping("favorites")
+	/* @RequestMapping("favorites")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") User user) {
 		ArrayList<Integer> favorites = user.getMuralids();
 		ArrayList<Mural> murals; 
@@ -87,6 +87,6 @@ public class MuralController {
 			Optional<Mural> m = mr.findById(favorites.get(i)); 
 			
 		}
-	}
+	} */
 	
 }
