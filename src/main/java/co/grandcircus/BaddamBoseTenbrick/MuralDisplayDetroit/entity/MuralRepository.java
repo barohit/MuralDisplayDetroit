@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MuralRepository extends JpaRepository<Mural, Integer> {
+	
 
 }

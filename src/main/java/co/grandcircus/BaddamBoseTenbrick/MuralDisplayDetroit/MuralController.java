@@ -1,6 +1,8 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,6 +77,16 @@ public class MuralController {
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
 		ur.save(new User(username, password)); 
 		return new ModelAndView("confirmationpage"); 
+	}
+	
+	@RequestMapping("favorites")
+	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") User user) {
+		ArrayList<Integer> favorites = user.getMuralids();
+		ArrayList<Mural> murals; 
+		for (int i = 0; i < favorites.size(); i++) {
+			Optional<Mural> m = mr.findById(favorites.get(i)); 
+			
+		}
 	}
 	
 }

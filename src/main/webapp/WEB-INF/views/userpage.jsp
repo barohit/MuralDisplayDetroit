@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Hello ${user.username}, you have logged in!
+	Hello ${user.username}, you have logged in! <br />
+	
+	<a href="favorites?user=${user}"> Favorites </a>
+	
 </body>
 </html>
