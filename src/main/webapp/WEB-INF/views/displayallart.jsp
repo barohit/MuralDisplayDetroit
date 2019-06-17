@@ -17,7 +17,7 @@
 <div class="dropdown">
   <button class="dropbtn"> Sort By</button>
   <div class="dropdown-content">
-  <a href="#">Style</a>
+  <a href="/style">Style</a>
   <a href="#">Neighborhood</a>
   <a href="#">Year</a>
   <a href="#">Artist</a>

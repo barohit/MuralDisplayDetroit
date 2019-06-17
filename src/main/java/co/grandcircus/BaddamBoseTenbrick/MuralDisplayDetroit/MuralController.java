@@ -72,6 +72,11 @@ public class MuralController {
 	public ModelAndView displayAllArt() {
 		return new ModelAndView("displayallart"); 
 	}
+	@RequestMapping("/style")
+	public ModelAndView displayStyle() {
+		
+		return new ModelAndView("style","list",mr.findAll()); 
+	}
 	
 	@RequestMapping("/confirmation")
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
