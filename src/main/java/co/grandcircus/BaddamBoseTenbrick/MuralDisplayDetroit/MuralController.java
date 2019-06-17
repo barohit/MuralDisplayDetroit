@@ -77,8 +77,6 @@ public class MuralController {
 	@RequestMapping("/display_all_art")
 	public ModelAndView displayAllArt(HttpSession session) {
 		ModelAndView mv = new ModelAndView("displayallart", "list", mr.findAll());
-		System.out.println(session.getAttribute("loggedin"));
-		System.out.println(((User) session.getAttribute("user")).getUsername());
 		if (((Boolean) session.getAttribute("loggedin")) == true) {
 			System.out.println("Nick is chewing on his sweater");
 			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
@@ -128,6 +126,7 @@ public class MuralController {
 				muralids += ",";
 			}
 		}
+		System.out.println(muralids + "flying pizza man");
 		ur.updateFavorites(muralids, userid);
 		for (int i = 0; i < favorites.length; i++) {
 			List<Mural> e = mr.findAll(); 
