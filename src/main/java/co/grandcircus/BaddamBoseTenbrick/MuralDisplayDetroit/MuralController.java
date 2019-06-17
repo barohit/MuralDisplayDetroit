@@ -81,7 +81,6 @@ public class MuralController {
 	
 	@RequestMapping("faves")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
-		System.out.println(ur.getOne(id).getMuralids());
 		String favorites = ur.getOne(id).getMuralids();
 		String[] muralidstring = favorites.split(",");
 		Integer[] muralids = new Integer[muralidstring.length];
