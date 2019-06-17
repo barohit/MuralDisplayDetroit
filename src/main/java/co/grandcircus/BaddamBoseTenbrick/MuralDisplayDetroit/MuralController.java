@@ -31,8 +31,8 @@ public class MuralController {
 	UserRepository ur; 
 
 	@RequestMapping("/")
-	public ModelAndView homeTest() {
-
+	public ModelAndView homeTest(HttpSession session) {
+		session.setAttribute("loggedin", false);
 		return new ModelAndView("Index");
 	}
 	
@@ -59,7 +59,7 @@ public class MuralController {
 			if (user.getPassword().equals(password)) {
 				session.setAttribute("loggedin", true);
 				session.setAttribute("user", user);
-				ModelAndView mv = new ModelAndView("userpage", "user", user); 
+				ModelAndView mv = new ModelAndView("userpage", "user", session.getAttribute("user")); 
 				mv.addObject("session", session); 
 				return mv; 
 			} else {
@@ -77,8 +77,11 @@ public class MuralController {
 	@RequestMapping("/display_all_art")
 	public ModelAndView displayAllArt(HttpSession session) {
 		ModelAndView mv = new ModelAndView("displayallart", "list", mr.findAll());
-		if ((Boolean) session.getAttribute("loggedin") == true) {
-			mv.addObject("user", session.getAttribute("user")); 
+		System.out.println(session.getAttribute("loggedin"));
+		System.out.println(((User) session.getAttribute("user")).getUsername());
+		if (((Boolean) session.getAttribute("loggedin")) == true) {
+			System.out.println("Nick is chewing on his sweater");
+			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
 		}
 		return mv; 
 	}
@@ -114,5 +117,31 @@ public class MuralController {
 		}
 		
 	}	
+	
+	@RequestMapping("addtofavorites")
+	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String[] favorites, @RequestParam("favoritez") Integer userid) {
+		
+		String muralids = ""; 
+		for (int i = 0; i < favorites.length; i++) {
+			muralids += favorites[i]; 
+			if (i != favorites.length - 1) {
+				muralids += ",";
+			}
+		}
+		ur.updateFavorites(muralids, userid);
+		for (int i = 0; i < favorites.length; i++) {
+			List<Mural> e = mr.findAll(); 
+			Mural m = new Mural(); 
+			for (int i1 = 0; i1 < e.size(); i1++) {
+				if (e.get(i1).getMuralid() == userid) {
+					m = e.get(i1); 
+				}
+			}
+			int favoriteCount = m.getFavoritecount(); 
+			favoriteCount++; 
+			mr.updateFavoriteCount(m.getMuralid(), favoriteCount);
+		}
+		return new ModelAndView("redirect:/faves");
+	}
 	
 }
