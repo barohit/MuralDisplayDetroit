@@ -14,7 +14,7 @@ public class User {
 	
 	private String username; 
 	private String password; 
-	private ArrayList<Integer> muralids; 
+	private String muralids; 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer userid;
@@ -24,7 +24,7 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String username, String password, ArrayList<Integer> muralids, Integer userid) {
+	public User(String username, String password, String muralids, Integer userid) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -32,7 +32,7 @@ public class User {
 		this.userid = userid;
 	}
 	
-	public User(String username, String password, ArrayList<Integer> muralids) {
+	public User(String username, String password, String muralids) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -61,11 +61,11 @@ public class User {
 		this.password = password;
 	}
 
-	public ArrayList<Integer> getMuralids() {
+	public String getMuralids() {
 		return muralids;
 	}
 
-	public void setMuralids(ArrayList<Integer> muralids) {
+	public void setMuralids(String muralids) {
 		this.muralids = muralids;
 	}
 

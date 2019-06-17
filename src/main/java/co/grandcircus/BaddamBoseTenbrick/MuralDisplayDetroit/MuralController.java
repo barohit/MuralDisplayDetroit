@@ -60,7 +60,7 @@ public class MuralController {
 				return new ModelAndView("error"); 
 			}
 		} else {
-			return new ModelAndView("error"); 
+			return new ModelAndView("erroruser"); 
 		}
 	}
 	
@@ -81,15 +81,21 @@ public class MuralController {
 	
 	@RequestMapping("faves")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
-		ArrayList<Integer> favorites = ur.getOne(id).getMuralids();
+		System.out.println(ur.getOne(id).getMuralids());
+		String favorites = ur.getOne(id).getMuralids();
+		String[] muralidstring = favorites.split(",");
+		Integer[] muralids = new Integer[muralidstring.length];
+		for (int i = 0; i < muralidstring.length; i++) {
+			muralids[i] = Integer.parseInt(muralidstring[i]);
+		}
 		ArrayList<Mural> murals = new ArrayList<Mural>(); 
-		for (int i = 0; i < favorites.size(); i++) {
-			Optional<Mural> m = mr.findById(favorites.get(i)); 
+		for (int i = 0; i < muralids.length; i++) {
+			Optional<Mural> m = mr.findById(muralids[i]); 
 			if (m.isPresent()) {
 				Mural m2 = m.get();
 				murals.add(m2); 
 			} 
-		}
+		} 
 		return new ModelAndView("favorites", "murals", murals);
 	}	
 	

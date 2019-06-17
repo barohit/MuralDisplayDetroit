@@ -12,6 +12,8 @@
 		<input type="hidden" value="${user.userid}" name="user">
 		<input type="submit" value="favorites">
 	</form>
-	
+
+	<a href="display_all_art?user=${user}"> Add favorites: </a>
+
 </body>
 </html>
