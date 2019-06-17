@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,11 +8,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	Hello ${user.username}, you have logged in! <br />
-	<form action="faves">
-		<input type="hidden" value="${user.userid}" name="user">
-		<input type="submit" value="favorites">
-	</form>
+	<c:forEach items="${murals}" var="m">
+	<img src="${m.imgloc}"> 
+	</c:forEach>
 	
+
 </body>
 </html>

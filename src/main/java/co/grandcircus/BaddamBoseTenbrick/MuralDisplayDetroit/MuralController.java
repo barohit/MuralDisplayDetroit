@@ -79,14 +79,18 @@ public class MuralController {
 		return new ModelAndView("confirmationpage"); 
 	}
 	
-	/* @RequestMapping("favorites")
-	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") User user) {
-		ArrayList<Integer> favorites = user.getMuralids();
-		ArrayList<Mural> murals; 
+	@RequestMapping("faves")
+	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
+		ArrayList<Integer> favorites = ur.getOne(id).getMuralids();
+		ArrayList<Mural> murals = new ArrayList<Mural>(); 
 		for (int i = 0; i < favorites.size(); i++) {
 			Optional<Mural> m = mr.findById(favorites.get(i)); 
-			
+			if (m.isPresent()) {
+				Mural m2 = m.get();
+				murals.add(m2); 
+			} 
 		}
-	} */
+		return new ModelAndView("favorites", "murals", murals);
+	}	
 	
 }
