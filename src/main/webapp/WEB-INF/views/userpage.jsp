@@ -14,6 +14,8 @@
 	</form>
 
 	<a href="display_all_art?user=${user}"> Add favorites: </a>
+	
+	
 
 </body>
 </html>

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -51,11 +53,15 @@ public class MuralController {
 	}
 	
 	@RequestMapping("/loggingin")
-	public ModelAndView login(@RequestParam("username") String username, @RequestParam("password") String password) {
+	public ModelAndView login(HttpSession session, @RequestParam("username") String username, @RequestParam("password") String password) {
 		User user = ur.findByUsername(username); 
 		if (user != null) {
 			if (user.getPassword().equals(password)) {
-				return new ModelAndView("userpage", "user", user); 
+				session.setAttribute("loggedin", true);
+				session.setAttribute("user", user);
+				ModelAndView mv = new ModelAndView("userpage", "user", user); 
+				mv.addObject("session", session); 
+				return mv; 
 			} else {
 				return new ModelAndView("error"); 
 			}
@@ -69,14 +75,14 @@ public class MuralController {
 		return new ModelAndView("adduser"); 
 	}
 	@RequestMapping("/display_all_art")
-	public ModelAndView displayAllArt() {
-		return new ModelAndView("displayallart"); 
+	public ModelAndView displayAllArt(HttpSession session) {
+		ModelAndView mv = new ModelAndView("displayallart", "list", mr.findAll());
+		if ((Boolean) session.getAttribute("loggedin") == true) {
+			mv.addObject("user", session.getAttribute("user")); 
+		}
+		return mv; 
 	}
-	@RequestMapping("/style")
-	public ModelAndView displayStyle() {
-		
-		return new ModelAndView("style","list",mr.findAll()); 
-	}
+	
 	
 	@RequestMapping("/confirmation")
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
@@ -86,21 +92,27 @@ public class MuralController {
 	
 	@RequestMapping("faves")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
-		String favorites = ur.getOne(id).getMuralids();
-		String[] muralidstring = favorites.split(",");
-		Integer[] muralids = new Integer[muralidstring.length];
-		for (int i = 0; i < muralidstring.length; i++) {
-			muralids[i] = Integer.parseInt(muralidstring[i]);
-		}
-		ArrayList<Mural> murals = new ArrayList<Mural>(); 
-		for (int i = 0; i < muralids.length; i++) {
-			Optional<Mural> m = mr.findById(muralids[i]); 
-			if (m.isPresent()) {
-				Mural m2 = m.get();
-				murals.add(m2); 
+		try {
+			String favorites = ur.getOne(id).getMuralids();
+			String[] muralidstring = favorites.split(",");
+			Integer[] muralids = new Integer[muralidstring.length];
+			for (int i = 0; i < muralidstring.length; i++) {
+				muralids[i] = Integer.parseInt(muralidstring[i]);
+			}
+			ArrayList<Mural> murals = new ArrayList<Mural>(); 
+			for (int i = 0; i < muralids.length; i++) {
+				Optional<Mural> m = mr.findById(muralids[i]); 
+				if (m.isPresent()) {
+					Mural m2 = m.get();
+					murals.add(m2); 
+				} 
 			} 
-		} 
-		return new ModelAndView("favorites", "murals", murals);
+			return new ModelAndView("favorites", "murals", murals);
+		} catch (NullPointerException e) {
+			System.out.println("Sorry empty favorites");
+			return null; 
+		}
+		
 	}	
 	
 }

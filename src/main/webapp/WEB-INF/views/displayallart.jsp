@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import=co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +24,14 @@
   <a href="#">Artist</a>
   </div>
 </div>
+<form action="addtofavorites">
+<c:forEach items="${list}" var="l">
+	<img src="${l.imgloc}"> 
+	Add to favorites? <input type="checkbox" name="${l.muralid }" value="${l.muralid}?">
+</c:forEach>
+	<input type="submit" value="submitfavorites">
+ </form>
+ <% User u = "${user}"; %>
 
 
 
