@@ -150,24 +150,79 @@ public class MuralController {
 	
 	@RequestMapping("recommendations")
 	public ModelAndView recommendations(HttpSession session) {
-		User user = (User) session.getAttribute("user");
+		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
 		List<Favorite> userFavorites = fr.findByUserid(userid);
 		
-		HashMap<Integer, List<Favorite>> favoritelists = new HashMap<Integer, List<Favorite>>(); 
-		List<Favorite> everything  =  fr.findAll();  
+		
+		HashMap<Integer, List<Favorite>> favoriteLists = new HashMap<Integer, List<Favorite>>(); 
+		List<Favorite> everything = fr.findAll(); 
+
+		
 		ArrayList<Integer> userids = new ArrayList<Integer>();
+		ArrayList<Integer> commonFavoriteUsers = new ArrayList<Integer>(); 
 		
 		for (int i = 0; i < everything.size(); i++) {
-			if (!(userids.contains(everything.get(i).getUserid()))) {
+			if (!(userids.contains(everything.get(i).getUserid())) && everything.get(i).getUserid()!= null) {
 				userids.add(everything.get(i).getUserid());
 			}
 		}
+		
 		for (int i = 0; i < userids.size(); i++) {
-			favoritelists.add()
+			favoriteLists.put(userids.get(i), fr.findByUserid(userids.get(i)));
 		}
 		
-		return null; 
+		/* for (int i = 0; i < favoriteLists.size(); i++) {
+			System.out.println(favoriteLists.get(userids.get(i)));
+		} */
+		
+		 
+		for (int i = 0; i < favoriteLists.size(); i++) {
+			int commonCount = 0;
+			int smallerListSize = 0;
+			if (userFavorites.size() < favoriteLists.get(userids.get(i)).size()) {
+				smallerListSize = userFavorites.size();
+			} else {
+				smallerListSize = favoriteLists.get(userids.get(i)).size();
+			}
+			for (int j = 0; j < favoriteLists.get(userids.get(i)).size(); j++) {
+				for (int k = 0; k < userFavorites.size(); k++) {
+					if (favoriteLists.get(userids.get(i)).get(j).getMuralid() == userFavorites.get(k).getMuralid()) {
+						commonCount++; 
+					}
+				}
+			}
+			if (commonCount >= smallerListSize / 2) {
+				commonFavoriteUsers.add(userids.get(i));
+			}
+			 
+			/*for (int l = 0; l < commonFavoriteUsers.size(); l++) {
+			System.out.println(commonFavoriteUsers.get(l));
+			 } */
+		}
+		
+		
+		
+		ArrayList<Integer> recommendedExtraMurals = new ArrayList<Integer>(); 
+		for (int i = 0; i < commonFavoriteUsers.size(); i++) {
+			List<Favorite> entryFavorites = fr.findByUserid(commonFavoriteUsers.get(i));
+			for (int j = 0; j < entryFavorites.size(); j++) {
+				if (!(userFavorites.contains(entryFavorites.get(j)))) {
+					recommendedExtraMurals.add(entryFavorites.get(j).getMuralid());
+				}
+			}
+		}
+		
+		ArrayList<Mural> recs = new ArrayList<Mural>(); 
+		
+		for (int i = 0; i < recommendedExtraMurals.size(); i++)  {
+			System.out.println(recommendedExtraMurals.get(i));
+			recs.add(mr.getOne(recommendedExtraMurals.get(i)));
+		}
+		
+		
+		
+		return new ModelAndView("recommendations", "recommendations", recs);
 		
 	}
 }
