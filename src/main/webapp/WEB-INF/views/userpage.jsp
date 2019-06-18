@@ -8,12 +8,18 @@
 </head>
 <body>
 	Hello ${user.username}, you have logged in! <br />
+	
 	<form action="faves">
 		<input type="hidden" value="${user.userid}" name="user">
 		<input type="submit" value="favorites">
 	</form>
+	
 	<a href="display_all_art"> Add favorites: </a>
 	
+	<br />
+	<br />
+	
+	<a href="recommendations"> Recommendations </a> <br /> <br >
 	
 	<a href="logout"> Log Out </a>
 	

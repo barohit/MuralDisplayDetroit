@@ -2,10 +2,13 @@ package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set; 
 
 import javax.servlet.http.HttpSession;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,6 +116,7 @@ public class MuralController {
 	@RequestMapping("logout") 
 	public ModelAndView logout(HttpSession session) {
 		session.setAttribute("loggedin", false);
+		session.removeAttribute("user");
 		return new ModelAndView("Index");
 	}
 	
@@ -141,6 +145,29 @@ public class MuralController {
 			}
 			return new ModelAndView("redirect:/");
 		} 
+		
+	}
+	
+	@RequestMapping("recommendations")
+	public ModelAndView recommendations(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		Integer userid = user.getUserid();  
+		List<Favorite> userFavorites = fr.findByUserid(userid);
+		
+		HashMap<Integer, List<Favorite>> favoritelists = new HashMap<Integer, List<Favorite>>(); 
+		List<Favorite> everything  =  fr.findAll();  
+		ArrayList<Integer> userids = new ArrayList<Integer>();
+		
+		for (int i = 0; i < everything.size(); i++) {
+			if (!(userids.contains(everything.get(i).getUserid()))) {
+				userids.add(everything.get(i).getUserid());
+			}
+		}
+		for (int i = 0; i < userids.size(); i++) {
+			favoritelists.add()
+		}
+		
+		return null; 
 		
 	}
 }
