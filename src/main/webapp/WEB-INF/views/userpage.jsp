@@ -15,6 +15,9 @@
 	<a href="display_all_art"> Add favorites: </a>
 	
 	
+	<a href="logout"> Log Out </a>
+	
+	
 
 </body>
 </html>

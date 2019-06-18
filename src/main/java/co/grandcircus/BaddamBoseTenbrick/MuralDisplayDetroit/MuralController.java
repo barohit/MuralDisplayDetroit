@@ -110,6 +110,12 @@ public class MuralController {
 		return new ModelAndView("faves", "faves", faves2);
 	}
 	
+	@RequestMapping("logout") 
+	public ModelAndView logout(HttpSession session) {
+		session.setAttribute("loggedin", false);
+		return new ModelAndView("Index");
+	}
+	
 	@RequestMapping("addtofavorites")
 	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String favorites, @RequestParam("favoritez") Integer userid) {
 		String[] favorites2 = favorites.split(",");
