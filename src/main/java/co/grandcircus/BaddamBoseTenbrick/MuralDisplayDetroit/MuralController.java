@@ -98,30 +98,17 @@ public class MuralController {
 		return new ModelAndView("confirmationpage"); 
 	}
 	
-	/* @RequestMapping("faves")
+	@RequestMapping("faves")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
-		try {
-			String favorites = ur.getOne(id).getMuralids();
-			String[] muralidstring = favorites.split(",");
-			Integer[] muralids = new Integer[muralidstring.length];
-			for (int i = 0; i < muralidstring.length; i++) {
-				muralids[i] = Integer.parseInt(muralidstring[i]);
-			}
-			ArrayList<Mural> murals = new ArrayList<Mural>(); 
-			for (int i = 0; i < muralids.length; i++) {
-				Optional<Mural> m = mr.findById(muralids[i]); 
-				if (m.isPresent()) {
-					Mural m2 = m.get();
-					murals.add(m2); 
-				} 
-			} 
-			return new ModelAndView("favorites", "murals", murals);
-		} catch (NullPointerException e) {
-			System.out.println("Sorry empty favorites");
-			return null; 
+		List<Favorite> faves = fr.findByUserid(id);
+		ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
+		for (int i = 0; i < faves.size(); i++) {
+			Optional <Mural> m = mr.findById(faves.get(i).getMuralid());
+			m.ifPresent(mural -> faves2.add(m.get()));
 		}
 		
-	}	*/
+		return new ModelAndView("faves", "faves", faves2);
+	}
 	
 	@RequestMapping("addtofavorites")
 	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String favorites, @RequestParam("favoritez") Integer userid) {
