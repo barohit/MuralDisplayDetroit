@@ -23,7 +23,6 @@ public class Mural {
 	private Integer muralid; 
 	private String name; 
 	private String artistname; 
-	private Integer favoritecount;
 	
 	public Mural() {
 		super();
@@ -31,7 +30,7 @@ public class Mural {
 	}
 
 	public Mural(String imgloc, Double latitude, Double longitude, String address, String neighborhood,
-			ArrayList<String> tags, Integer muralid, String name, String artistname, Integer favoritecount) {
+			ArrayList<String> tags, Integer muralid, String name, String artistname) {
 		super();
 		this.imgloc = imgloc;
 		this.latitude = latitude;
@@ -42,12 +41,11 @@ public class Mural {
 		this.muralid = muralid;
 		this.name = name;
 		this.artistname = artistname;
-		this.favoritecount = favoritecount;
 	}
 	
 	//no id constructor
 	public Mural(String imgloc, Double latitude, Double longitude, String address, String neighborhood,
-			ArrayList<String> tags, String name, String artistname, Integer favoritecount) {
+			ArrayList<String> tags, String name, String artistname) {
 		super();
 		this.imgloc = imgloc;
 		this.latitude = latitude;
@@ -57,7 +55,6 @@ public class Mural {
 		this.tags = tags;
 		this.name = name;
 		this.artistname = artistname;
-		this.favoritecount = favoritecount;
 	}
 
 	public String getImgloc() {
@@ -132,13 +129,6 @@ public class Mural {
 		this.artistname = artistname;
 	}
 
-	public Integer getFavoritecount() {
-		return favoritecount;
-	}
-
-	public void setFavoritecount(Integer favoritecount) {
-		this.favoritecount = favoritecount;
-	} 
 	
 	
 

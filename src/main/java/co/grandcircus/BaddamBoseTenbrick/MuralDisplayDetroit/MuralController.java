@@ -1,5 +1,6 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +9,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.FavoriteRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.MuralRepository;
@@ -29,6 +33,9 @@ public class MuralController {
 	
 	@Autowired
 	UserRepository ur; 
+	
+	@Autowired
+	FavoriteRepository fr; 
 
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
@@ -91,7 +98,7 @@ public class MuralController {
 		return new ModelAndView("confirmationpage"); 
 	}
 	
-	@RequestMapping("faves")
+	/* @RequestMapping("faves")
 	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
 		try {
 			String favorites = ur.getOne(id).getMuralids();
@@ -114,33 +121,33 @@ public class MuralController {
 			return null; 
 		}
 		
-	}	
+	}	*/
 	
 	@RequestMapping("addtofavorites")
-	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String[] favorites, @RequestParam("favoritez") Integer userid) {
-		
-		String muralids = ""; 
-		for (int i = 0; i < favorites.length; i++) {
-			muralids += favorites[i]; 
-			if (i != favorites.length - 1) {
-				muralids += ",";
-			}
-		}
-		System.out.println(muralids + "flying pizza man");
-		ur.updateFavorites(muralids, userid);
-		for (int i = 0; i < favorites.length; i++) {
-			List<Mural> e = mr.findAll(); 
-			Mural m = new Mural(); 
-			for (int i1 = 0; i1 < e.size(); i1++) {
-				if (e.get(i1).getMuralid() == userid) {
-					m = e.get(i1); 
+	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String favorites, @RequestParam("favoritez") Integer userid) {
+		String[] favorites2 = favorites.split(",");
+		if (userid != null) {
+			for (int i = 0; i < favorites2.length; i++) {
+				try {
+					fr.save(new Favorite(Integer.parseInt(favorites2[i]), userid));
+				} catch (DataIntegrityViolationException e) {
+					
 				}
 			}
-			int favoriteCount = m.getFavoritecount(); 
-			favoriteCount++; 
-			mr.updateFavoriteCount(m.getMuralid(), favoriteCount);
-		}
-		return new ModelAndView("redirect:/faves");
+			List<Favorite> faves = fr.findByUserid(userid);
+			ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
+			for (int i = 0; i < faves.size(); i++) {
+				Optional <Mural> m = mr.findById(faves.get(i).getMuralid());
+				m.ifPresent(mural -> faves2.add(m.get()));
+			}
+			
+			return new ModelAndView("faves", "faves", faves2);
+		} else {
+			for (int i = 0; i < favorites2.length; i++) {
+				fr.save(new Favorite(Integer.parseInt(favorites2[i])));
+			}
+			return new ModelAndView("redirect:/");
+		} 
+		
 	}
-	
 }
