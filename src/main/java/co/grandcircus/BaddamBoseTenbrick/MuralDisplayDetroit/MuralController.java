@@ -210,7 +210,7 @@ public class MuralController {
 				}
 			}
 			
-			if (commonCount >= smallerListSize / 2) {
+			if (commonCount >= smallerListSize / 4) {
 				commonFavoriteUsers.add(userids.get(i));
 			}
 			 
