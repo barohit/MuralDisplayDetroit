@@ -16,5 +16,7 @@
 		<input type="submit" value="Add this to Favorites">
 	</form>
 	</c:forEach>
+	<br>
+	<a href="userpage"> Back to user page </a>
 </body>
 </html>
