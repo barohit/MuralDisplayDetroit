@@ -26,9 +26,12 @@
 </div>
 <form action="addtofavorites">
 <c:forEach items="${list}" var="l">
-	<img src="${l.imgloc}"> 
+	<div>
+	<img src="${l.imgloc}" height="500px"> 
+	<br />
 	Add to favorites? <input type="checkbox" class="favorites" name="favorites[]" value="${l.muralid}">
 	${l.muralid}
+	</div>
 </c:forEach>
 	<input type="hidden" name="favoritez" value="${userid}" >
 	<input type="submit" value="submitfavorites">
