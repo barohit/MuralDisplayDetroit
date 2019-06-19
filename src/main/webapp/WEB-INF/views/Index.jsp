@@ -15,7 +15,8 @@
 <p><a href="/display_all_art">Display All Art</a> </p>
 <p><a href="/upload_art">Upload Art</a>	</p>
 <br>
-<img src="${pic }" style ='height:600px'> 
+<img src="${pic }" style ='height:600px'> <br>
+<div style="font-family:courier;">Artist: ${artist }</div>
 
 </body>
 </html>

@@ -28,6 +28,9 @@
 <c:forEach items="${list}" var="l">
 	
 	<img src="${l.imgloc}" style ='height:400px'> <br>
+	<a href = "https://www.google.com/maps/dir//${l.address }" target="_blank">${l.address }</a><br>
+	Artist: ${l.artistname }<br>
+	
 	Add to favorites? <input type="checkbox" class="favorites" name="favorites[]" value="${l.muralid}">
 	${l.muralid}<br>
 <br>

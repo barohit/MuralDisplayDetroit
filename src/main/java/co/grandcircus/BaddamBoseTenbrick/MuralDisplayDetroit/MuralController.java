@@ -53,7 +53,9 @@ public class MuralController {
 		int rand1 = rand.nextInt(num);
 		Mural mural = mr.findById(rand1).orElse(null);
 		String pic = mural.getImgloc();
+		String artist = mural.getArtistname();
 		mv.addObject("pic", pic);
+		mv.addObject("artist",artist);
 		return mv;
 	}
 	
