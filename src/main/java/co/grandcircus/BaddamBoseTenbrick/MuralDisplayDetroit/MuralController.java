@@ -80,6 +80,11 @@ public class MuralController {
 		}
 	}
 	
+	@RequestMapping("userpage")
+	public ModelAndView returnToUser(HttpSession session) {
+		return new ModelAndView("userpage", "user", session.getAttribute("user")); 
+	}
+	
 	@RequestMapping("/create")
 	public ModelAndView createUser() {
 		return new ModelAndView("adduser"); 
@@ -88,7 +93,6 @@ public class MuralController {
 	public ModelAndView displayAllArt(HttpSession session) {
 		ModelAndView mv = new ModelAndView("displayallart", "list", mr.findAll());
 		if (((Boolean) session.getAttribute("loggedin")) == true) {
-			System.out.println("Nick is chewing on his sweater");
 			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
 		}
 		return mv; 
@@ -106,7 +110,9 @@ public class MuralController {
 		List<Favorite> faves = fr.findByUserid(id);
 		ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
 		for (int i = 0; i < faves.size(); i++) {
+			//Optional is an advanced hibernate Query class which represents the possibility of a mural being found by the query
 			Optional <Mural> m = mr.findById(faves.get(i).getMuralid());
+			// this takes a function as an argument and executes only if the mural. 
 			m.ifPresent(mural -> faves2.add(m.get()));
 		}
 		
@@ -132,6 +138,7 @@ public class MuralController {
 				}
 			}
 			List<Favorite> faves = fr.findByUserid(userid);
+			// converts favorites to murals. 
 			ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
 			for (int i = 0; i < faves.size(); i++) {
 				Optional <Mural> m = mr.findById(faves.get(i).getMuralid());

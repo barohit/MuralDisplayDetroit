@@ -13,5 +13,7 @@
 	<img src="${f.imgloc }">
 	</c:forEach>
 	
+	<a href="userpage"> Return to userpage</a>
+	
 </body>
 </html>
