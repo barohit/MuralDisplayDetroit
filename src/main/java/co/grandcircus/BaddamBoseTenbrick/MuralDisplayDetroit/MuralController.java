@@ -42,13 +42,16 @@ public class MuralController {
 
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
-		session.setAttribute("loggedin", false);
+		session.setAttribute("counter", 0);
+		if (((Integer) session.getAttribute("counter")) == 0) {
+			session.setAttribute("loggedin", false);
+		}
 		return new ModelAndView("Index");
 	}
 	
 
 	@RequestMapping("/art_near_me")
-	public ModelAndView displayArt() {
+	public ModelAndView displayArt(HttpSession session) {
 		List<Mural> murals = mr.findAll(); 
 		ModelAndView mv = new ModelAndView("artnearme", "murals", murals); 
 		mv.addObject("mapkey", mapkey);
@@ -82,6 +85,9 @@ public class MuralController {
 	
 	@RequestMapping("userpage")
 	public ModelAndView returnToUser(HttpSession session) {
+		int i = ((Integer) session.getAttribute("counter")); 
+		i++; 
+		session.setAttribute("counter", i);
 		return new ModelAndView("userpage", "user", session.getAttribute("user")); 
 	}
 	
@@ -239,7 +245,22 @@ public class MuralController {
 		
 		
 		// finally, the list of murals is sent to the jsp page for display. 
-		return new ModelAndView("recommendations", "recommendations", recs);
+		ModelAndView mv = new ModelAndView("recommendations", "recommendations", recs);
+		mv.addObject("user", session.getAttribute("user"));
+		return mv; 
 		
+	}
+	
+	@RequestMapping("addrecs")
+	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("user") Integer userid) {
+		String[] murals = muralid.split(",");
+		Integer[] muralids = new Integer[murals.length];
+		for (int i = 0; i < murals.length; i++) {
+			muralids[i] = Integer.parseInt(murals[i]);
+		}
+		for (int i = 0; i < muralids.length; i++) {
+			fr.save(new Favorite(muralids[i], userid));
+		}
+		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 	}
 }

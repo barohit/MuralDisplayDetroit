@@ -10,6 +10,11 @@
 <body>
 	<c:forEach items="${recommendations}" var="r">
 	<img src="${r.imgloc}">
+	<form action="addrecs">
+		<input type="hidden" name="muralid[]" value="${r.muralid}">
+		<input type="hidden" name="user" value="${user.userid}">
+		<input type="submit" value="Add">
+	</form>
 	</c:forEach>
 </body>
 </html>
