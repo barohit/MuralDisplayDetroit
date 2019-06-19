@@ -109,7 +109,11 @@ public class MuralController {
 	
 	@RequestMapping("/confirmation")
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
-		ur.save(new User(username, password)); 
+		try {
+			ur.save(new User(username, password)); 
+		}  catch (DataIntegrityViolationException e){
+			return new ModelAndView("errorcreate");
+		}
 		return new ModelAndView("confirmationpage"); 
 	}
 	
