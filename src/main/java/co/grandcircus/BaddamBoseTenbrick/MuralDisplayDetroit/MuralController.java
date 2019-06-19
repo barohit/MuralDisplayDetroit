@@ -1,14 +1,12 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set; 
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.FavoriteRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
-import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.MuralRepository;
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.UserRepository;
 
 @Controller
@@ -46,7 +44,17 @@ public class MuralController {
 			session.setAttribute("loggedin", false);
 			session.setAttribute("counter", -15);
 		}
-		return new ModelAndView("Index");
+		
+		ModelAndView mv = new ModelAndView("Index");
+		
+		
+		int num = mr.findAll().size();
+		Random rand = new Random();
+		int rand1 = rand.nextInt(num);
+		Mural mural = mr.findById(rand1).orElse(null);
+		String pic = mural.getImgloc();
+		mv.addObject("pic", pic);
+		return mv;
 	}
 	
 
