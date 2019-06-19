@@ -4,7 +4,7 @@ function validate() {
 	if (pass === confirmpass) {
 		return true; 
 	} else {
-		document.getElementById("password").innerHTML = "passwords do not match";
+		alert("passwords do not match");
 		return false; 
 	}
 }
