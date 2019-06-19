@@ -8,6 +8,6 @@
 </head>
 <body>
 Sorry, this username already exists
-<a href="adduser"> Return </a>
+<a href="create"> Return </a>
 </body>
 </html>
