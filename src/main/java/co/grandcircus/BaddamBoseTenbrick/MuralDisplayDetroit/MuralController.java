@@ -161,7 +161,6 @@ public class MuralController {
 		Integer userid = user.getUserid();  
 		List<Favorite> userFavorites = fr.findByUserid(userid);
 		
-		
 		HashMap<Integer, List<Favorite>> favoriteLists = new HashMap<Integer, List<Favorite>>(); 
 		List<Favorite> everything = fr.findAll(); 
 
@@ -208,13 +207,16 @@ public class MuralController {
 			 } */
 		}
 		
-		
+		ArrayList<Integer> favoriteMuralIds = new ArrayList<Integer>(); 
+		for (int i = 0; i < userFavorites.size(); i++) {
+			favoriteMuralIds.add(userFavorites.get(i).getMuralid());
+		}
 		
 		ArrayList<Integer> recommendedExtraMurals = new ArrayList<Integer>(); 
 		for (int i = 0; i < commonFavoriteUsers.size(); i++) {
 			List<Favorite> entryFavorites = fr.findByUserid(commonFavoriteUsers.get(i));
 			for (int j = 0; j < entryFavorites.size(); j++) {
-				if (!(userFavorites.contains(entryFavorites.get(j)))) {
+				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid()))) {
 					recommendedExtraMurals.add(entryFavorites.get(j).getMuralid());
 				}
 			}
