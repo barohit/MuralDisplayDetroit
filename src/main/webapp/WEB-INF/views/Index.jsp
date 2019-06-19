@@ -16,6 +16,7 @@
 <p><a href="/upload_art">Upload Art</a>	</p>
 <br>
 <img src="${pic }" style ='height:600px'> <br>
+<a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
 <div style="font-family:courier;">Artist: ${artist }</div>
 
 </body>
