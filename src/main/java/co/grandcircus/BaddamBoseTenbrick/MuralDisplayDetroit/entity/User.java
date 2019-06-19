@@ -1,5 +1,6 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="users")
 public class User {
-	
+	@Column(unique = true)
 	private String username; 
 	private String password; 
 	@Id
