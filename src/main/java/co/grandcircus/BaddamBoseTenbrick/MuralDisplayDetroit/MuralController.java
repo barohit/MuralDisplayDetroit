@@ -42,9 +42,9 @@ public class MuralController {
 
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
-		session.setAttribute("counter", 0);
-		if (((Integer) session.getAttribute("counter")) == 0) {
+		if (((Integer) session.getAttribute("counter")) == null) {
 			session.setAttribute("loggedin", false);
+			session.setAttribute("counter", -15);
 		}
 		return new ModelAndView("Index");
 	}
@@ -61,7 +61,12 @@ public class MuralController {
 	}
 	
 	@RequestMapping("/login") 
-	public ModelAndView loginPage() {
+	public ModelAndView loginPage(HttpSession session) {
+		if(((Boolean)session.getAttribute("loggedin"))== true)
+		{
+			return new ModelAndView("userpage","user",session.getAttribute("user"));
+			
+		}
 		return new ModelAndView("login");
 	}
 	
@@ -85,9 +90,6 @@ public class MuralController {
 	
 	@RequestMapping("userpage")
 	public ModelAndView returnToUser(HttpSession session) {
-		int i = ((Integer) session.getAttribute("counter")); 
-		i++; 
-		session.setAttribute("counter", i);
 		return new ModelAndView("userpage", "user", session.getAttribute("user")); 
 	}
 	
@@ -130,6 +132,7 @@ public class MuralController {
 	public ModelAndView logout(HttpSession session) {
 		session.setAttribute("loggedin", false);
 		session.removeAttribute("user");
+		session.setAttribute("counter", null);
 		return new ModelAndView("Index");
 	}
 	
