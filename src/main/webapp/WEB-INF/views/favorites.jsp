@@ -9,7 +9,7 @@
 </head>
 <body>
 	<c:forEach items="${murals}" var="m">
-	<img src="${m.imgloc}"> 
+	<img src="${m.imgloc}" style ='height:400px'> <br> 
 	</c:forEach>
 	
 
