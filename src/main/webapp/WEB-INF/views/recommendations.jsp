@@ -9,7 +9,7 @@
 </head>
 <body>
 	<c:forEach items="${recommendations}" var="r">
-	<img src="${r.imgloc}">
+	<img src="${r.imgloc}" style ='height:400px'> <br>
 	<form action="addrecs">
 		<input type="hidden" name="muralid[]" value="${r.muralid}">
 		<input type="hidden" name="user" value="${user.userid}">

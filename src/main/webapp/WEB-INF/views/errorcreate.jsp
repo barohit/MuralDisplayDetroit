@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>User Exists/title>
 </head>
 <body>
 Sorry, this username already exists
