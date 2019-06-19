@@ -29,11 +29,6 @@
 	<img src="${l.imgloc}"> 
 	Add to favorites? <input type="checkbox" class="favorites" name="favorites[]" value="${l.muralid}">
 	${l.muralid}
-	
-	<img src="${l.imgloc}" style ='height:400px'> <br>
-	Add to favorites? <input type="checkbox" class="favorites" name="favorites[]" value="${l.muralid}">
-	${l.muralid}
-
 </c:forEach>
 	<input type="hidden" name="favoritez" value="${userid}" >
 	<input type="submit" value="submitfavorites">

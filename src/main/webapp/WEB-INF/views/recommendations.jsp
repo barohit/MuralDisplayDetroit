@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Recommendations </title>
 </head>
 <body>
 	<c:forEach items="${recommendations}" var="r">
@@ -13,7 +13,7 @@
 	<form action="addrecs">
 		<input type="hidden" name="muralid[]" value="${r.muralid}">
 		<input type="hidden" name="user" value="${user.userid}">
-		<input type="submit" value="Add">
+		<input type="submit" value="Add this to Favorites">
 	</form>
 	</c:forEach>
 </body>

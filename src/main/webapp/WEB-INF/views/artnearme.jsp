@@ -98,6 +98,9 @@ function initMap(){
 <div id="map" style="width:100%;height:420px;"></div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}"></script>
+<br>
+<a href = "/">go back to homepage</a>
+<br>
 <font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink</font>
 
 </body>
