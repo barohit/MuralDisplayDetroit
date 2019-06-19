@@ -9,6 +9,7 @@
 </head>
 <body>
 	Here are your favorites!
+	<br>
 	<c:forEach items="${faves}" var="f">
 	<img src="${f.imgloc }" style ='height:400px'> <br>
 	</c:forEach>
