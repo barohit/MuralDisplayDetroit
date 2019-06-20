@@ -93,7 +93,7 @@ public class MuralController {
 				mv.addObject("session", session); 
 				return mv; 
 			} else {
-				return new ModelAndView("error"); 
+				return new ModelAndView("errorpass"); 
 			}
 		} else {
 			return new ModelAndView("erroruser"); 

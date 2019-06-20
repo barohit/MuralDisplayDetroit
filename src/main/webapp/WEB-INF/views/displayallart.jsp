@@ -35,7 +35,7 @@
 	Artist: ${l.artistname }<br>
 	
 	Add to favorites? <input type="checkbox" class="favorites" name="favorites[]" value="${l.muralid}">
-	${l.muralid}<br>
+	<br>
 <br>
 </c:forEach>
 	<input type="hidden" name="favoritez" value="${userid}" >
