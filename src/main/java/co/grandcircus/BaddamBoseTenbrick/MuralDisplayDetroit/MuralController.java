@@ -117,6 +117,10 @@ public class MuralController {
 		}
 		return mv; 
 	}
+	@RequestMapping("/upload_art")
+	public ModelAndView uploadArt() {
+		return new ModelAndView("uploadArt"); 
+	}
 	
 	
 	@RequestMapping("/confirmation")
