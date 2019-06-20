@@ -13,7 +13,7 @@
 	<form action="loggingin">
 		Username: <input type="text" name="username"> <br />
 		Password: <input type="text" name="password"> <br />
-		<input type="submit" value="log in">
+		<input type="submit" value="log in" >
 	</form> <br />
 	Don't have an account? <a href="create"> Create One </a>
 </body>

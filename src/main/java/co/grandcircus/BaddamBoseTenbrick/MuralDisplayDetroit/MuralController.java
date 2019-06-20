@@ -1,10 +1,12 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
@@ -108,6 +110,27 @@ public class MuralController {
 	@RequestMapping("/create")
 	public ModelAndView createUser() {
 		return new ModelAndView("adduser"); 
+	}
+	
+	@RequestMapping("/neighborhood")
+	public ModelAndView displayNeighborhood() {
+		List<Mural> murals = mr.findAll(); 
+		List<Mural> mural =  mr.findAllByOrderByNeighborhoodAsc();
+			
+		
+		HashMap<String, List<Mural>> neighborhood = new HashMap<String, List<Mural>>(); 
+		List<String> nlist = mr.findDistinctNeighborhood();
+		
+		for(int i=0;i< nlist.size();i++) {
+			neighborhood.put(nlist.get(i), mr.findAllByNeighborhood(nlist.get(i)));	
+			//neighborhood.put(mural.get(i), murals.get(i));
+			//System.out.println(Arrays.asList(neighborhood));
+		}
+		
+		ModelAndView mv = new ModelAndView("neighborhood","list", neighborhood);
+
+		//mv.addObject("neighbors", mr.findDistinctMurals());
+		return mv;
 	}
 	@RequestMapping("/display_all_art")
 	public ModelAndView displayAllArt(HttpSession session) {
