@@ -17,7 +17,7 @@ public class Mural {
 	private Double longitude; 
 	private String address; 
 	private String neighborhood; 
-	private ArrayList<String> tags; 
+	private String tags; 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer muralid; 
@@ -30,7 +30,7 @@ public class Mural {
 	}
 
 	public Mural(String imgloc, Double latitude, Double longitude, String address, String neighborhood,
-			ArrayList<String> tags, Integer muralid, String name, String artistname) {
+			String tags, Integer muralid, String name, String artistname) {
 		super();
 		this.imgloc = imgloc;
 		this.latitude = latitude;
@@ -45,7 +45,7 @@ public class Mural {
 	
 	//no id constructor
 	public Mural(String imgloc, Double latitude, Double longitude, String address, String neighborhood,
-			ArrayList<String> tags, String name, String artistname) {
+			String tags, String name, String artistname) {
 		super();
 		this.imgloc = imgloc;
 		this.latitude = latitude;
@@ -97,11 +97,11 @@ public class Mural {
 		this.neighborhood = neighborhood;
 	}
 
-	public ArrayList<String> getTags() {
+	public String getTags() {
 		return tags;
 	}
 
-	public void setTags(ArrayList<String> tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 

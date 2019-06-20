@@ -12,9 +12,9 @@
 
 <body>
 
-<h2>Gallery Top Favorites</h2>
+<h2>Gallery</h2>
 
-
+<!--  
 <div class="dropdown">
   <button class="dropbtn"> Sort By</button>
   <div class="dropdown-content">
@@ -24,6 +24,8 @@
   <a href="#">Artist</a>
   </div>
 </div>
+ -->
+
 <form action="addtofavorites">
 
 <c:forEach items="${list}" var="l">
