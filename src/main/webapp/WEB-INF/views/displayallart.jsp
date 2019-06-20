@@ -25,6 +25,7 @@
   </div>
 </div>
 <form action="addtofavorites">
+
 <c:forEach items="${list}" var="l">
 	
 	<img src="${l.imgloc}" style ='height:400px'> <br>

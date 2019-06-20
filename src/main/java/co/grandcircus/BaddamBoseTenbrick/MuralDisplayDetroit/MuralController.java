@@ -149,7 +149,21 @@ public class MuralController {
 		session.setAttribute("loggedin", false);
 		session.removeAttribute("user");
 		session.setAttribute("counter", null);
-		return new ModelAndView("Index");
+		
+		int num = mr.findAll().size();
+		Random rand = new Random();
+		int rand1 = rand.nextInt(num);
+		
+		ModelAndView mv=new ModelAndView("Index");
+		Mural mural = mr.findById(rand1).orElse(null);
+		String pic = mural.getImgloc();
+		String artist = mural.getArtistname();
+		String address = mural.getAddress();
+		mv.addObject("pic", pic);
+		mv.addObject("artist",artist);
+		mv.addObject("address", address);
+		return mv;
+		 
 	}
 	
 	@RequestMapping("addtofavorites")
