@@ -15,6 +15,6 @@
 		Confirm Password: <input type="text" name="confirmpassword">
 		<input type="submit" onclick="return validate()">
 	</form>
-<p id="password"></p>
+<p id="passvord"></p>
 </body>
 </html>
