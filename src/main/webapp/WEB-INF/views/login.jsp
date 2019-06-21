@@ -10,9 +10,9 @@
 </head>
 </head>
 <body>
-	<form action="loggingin">
+	<form action="loggingin" method ="post">
 		Username: <input type="text" name="username"> <br />
-		Password: <input type="text" name="password"> <br />
+		Password: <input type="password" name="password"> <br />
 		<input type="submit" value="log in" >
 	</form> <br />
 	Don't have an account? <a href="create"> Create One </a>
