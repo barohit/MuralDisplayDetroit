@@ -1,21 +1,43 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.TreeSet;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
@@ -143,6 +165,129 @@ public class MuralController {
 	@RequestMapping("/upload_art")
 	public ModelAndView uploadArt() {
 		return new ModelAndView("uploadArt"); 
+	}
+	
+	@RequestMapping("/upload")
+	public ModelAndView upload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
+		URL urll = null;
+	    try {
+			urll = new URL("https://api.imgur.com/3/image");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    HttpURLConnection conn = null; 
+		try {
+			conn = (HttpURLConnection) urll.openConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    BufferedImage image = null;
+	    //read image
+	    try {
+			image = ImageIO.read(picture);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+	    try {
+			ImageIO.write(image, "png", byteArray);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    byte[] byteImage = byteArray.toByteArray();
+	    String dataImage = new String(Base64.getDecoder().decode(byteImage));
+	    String data = null; 
+		try {
+			data = URLEncoder.encode("image", "UTF-8") + "="
+			+ URLEncoder.encode(dataImage, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    String clientID = "08e1b736d3ba788";
+	    
+	    conn.setDoOutput(true);
+	    conn.setDoInput(true);
+	    conn.setRequestProperty("Authorization", "Client-ID " + clientID);
+	    try {
+			conn.setRequestMethod("POST");
+		} catch (ProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    conn.setRequestProperty("Content-Type",
+	            "application/x-www-form-urlencoded");
+
+	    try {
+			conn.connect();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    StringBuilder stb = new StringBuilder();
+	    OutputStreamWriter wr = null;
+		try {
+			wr = new OutputStreamWriter(conn.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			wr.write(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			wr.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    // Get the response
+	    BufferedReader rd = null; 
+		try {
+			rd = new BufferedReader(
+			        new InputStreamReader(conn.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    String line;
+	    try {
+			while ((line = rd.readLine()) != null) {
+			    stb.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    System.out.println(stb);
+	    try {
+			wr.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			rd.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		//620293de4b9fe7d4bebf5da66d74b48cb380a915
+		
+		return new ModelAndView("uploadconfirmation"); 
+		
+		
 	}
 	
 	
