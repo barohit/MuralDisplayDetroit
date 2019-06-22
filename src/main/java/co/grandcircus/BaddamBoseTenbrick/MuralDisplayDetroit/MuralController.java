@@ -168,50 +168,25 @@ public class MuralController {
 	}
 	
 	@RequestMapping("/upload")
-	public ModelAndView upload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
+	public ModelAndView upload(@RequestParam("picture") File picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
 		URL urll = null;
 	    try {
-			urll = new URL("https://api.imgur.com/3/image");
+			urll = new URL("https://api.imgur.com/3/upload");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    HttpURLConnection conn = null; 
+	   
 		try {
 			conn = (HttpURLConnection) urll.openConnection();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-	    BufferedImage image = null;
-	    //read image
-	    try {
-			image = ImageIO.read(picture);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-	    try {
-			ImageIO.write(image, "png", byteArray);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    byte[] byteImage = byteArray.toByteArray();
-	    String dataImage = new String(Base64.getDecoder().decode(byteImage));
-	    String data = null; 
-		try {
-			data = URLEncoder.encode("image", "UTF-8") + "="
-			+ URLEncoder.encode(dataImage, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    String clientID = "08e1b736d3ba788";
-	    
-	    conn.setDoOutput(true);
+		
+		String clientID = "08e1b736d3ba788";
+		conn.setDoOutput(true);
 	    conn.setDoInput(true);
 	    conn.setRequestProperty("Authorization", "Client-ID " + clientID);
 	    try {
@@ -229,6 +204,46 @@ public class MuralController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			System.out.println(conn.getResponseCode());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+	    BufferedImage image = null;
+	    //read image
+	    File testfile = new File("//Users//rohitbaddam//Downloads//f_logo_RGB-Hex-Blue_512.png");
+	    System.out.println(testfile.canRead());
+	    try {
+			image = ImageIO.read(testfile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Sorry, we could not find the image");
+		}
+	    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+	    try {
+			ImageIO.write(image, "png", byteArray);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Cannot write");
+		}
+	    byte[] byteImage = byteArray.toByteArray();
+	    System.out.println("testinghahahahaha!");
+	    String dataImage = new String(Base64.getDecoder().decode(byteImage));
+	    System.out.println("successfuldecode!");
+	    String data = null; 
+		try {
+			data = URLEncoder.encode("image", "UTF-8") + "="
+			+ URLEncoder.encode(dataImage, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	   
+	    
+	   
 	    StringBuilder stb = new StringBuilder();
 	    OutputStreamWriter wr = null;
 		try {
