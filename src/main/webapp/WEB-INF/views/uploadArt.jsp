@@ -8,7 +8,7 @@
 </head>
 <body>
 Choose upload picture of mural and fill in details: <br /> <br />
-<form action="upload"> 
+<form action="upload" method="POST" enctype="multipart/form-data" modelAttribute="fileUpload"> 
 	Upload file: <input type="file" name="picture"> OR: <br /> 
 	Copy and Paste URL <input type="url" name="url"> <br /> <br /> 
 	Name: <input type="text" name="name"> <br /> <br />

@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.TreeSet;
+import javax.servlet.ServletContext;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -52,6 +55,9 @@ public class MuralController {
 	
 	@Value("${map.key}")
 	String mapkey;
+	
+	@Autowired
+	ServletContext context; 
 	
 	@Autowired
 	MuralRepository mr;
@@ -168,138 +174,16 @@ public class MuralController {
 	}
 	
 	@RequestMapping("/upload")
-	public ModelAndView upload(@RequestParam("picture") File picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
-		URL urll = null;
-	    try {
-			urll = new URL("https://api.imgur.com/3/upload");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    HttpURLConnection conn = null; 
-	   
-		try {
-			conn = (HttpURLConnection) urll.openConnection();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
 		
-		String clientID = "08e1b736d3ba788";
-		conn.setDoOutput(true);
-	    conn.setDoInput(true);
-	    conn.setRequestProperty("Authorization", "Client-ID " + clientID);
-	    try {
-			conn.setRequestMethod("POST");
-		} catch (ProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    conn.setRequestProperty("Content-Type",
-	            "application/x-www-form-urlencoded");
-
-	    try {
-			conn.connect();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String uploadPath = context.getRealPath("/") + "WEB-INF" + File.separator + "views" + File.separator + "UserMurals" + File.separator;
 		try {
-			System.out.println(conn.getResponseCode());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-	    BufferedImage image = null;
-	    //read image
-	    File testfile = new File("//Users//rohitbaddam//Downloads//f_logo_RGB-Hex-Blue_512.png");
-	    System.out.println(testfile.canRead());
-	    try {
-			image = ImageIO.read(testfile);
+			FileCopyUtils.copy(picture.getBytes(), new File(uploadPath+picture.getOriginalFilename()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Sorry, we could not find the image");
+			System.out.println("Spring is literal garbage"); 
 		}
-	    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-	    try {
-			ImageIO.write(image, "png", byteArray);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Cannot write");
-		}
-	    byte[] byteImage = byteArray.toByteArray();
-	    System.out.println("testinghahahahaha!");
-	    String dataImage = new String(Base64.getDecoder().decode(byteImage));
-	    System.out.println("successfuldecode!");
-	    String data = null; 
-		try {
-			data = URLEncoder.encode("image", "UTF-8") + "="
-			+ URLEncoder.encode(dataImage, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	   
-	    
-	   
-	    StringBuilder stb = new StringBuilder();
-	    OutputStreamWriter wr = null;
-		try {
-			wr = new OutputStreamWriter(conn.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    try {
-			wr.write(data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    try {
-			wr.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	    // Get the response
-	    BufferedReader rd = null; 
-		try {
-			rd = new BufferedReader(
-			        new InputStreamReader(conn.getInputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    String line;
-	    try {
-			while ((line = rd.readLine()) != null) {
-			    stb.append(line).append("\n");
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    System.out.println(stb);
-	    try {
-			wr.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    try {
-			rd.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
-		//620293de4b9fe7d4bebf5da66d74b48cb380a915
-		
+        mr.save(new Mural("" + uploadPath + picture.getOriginalFilename(), 42.335960, -83.049751, address, neighborhood, name, artist));
 		return new ModelAndView("uploadconfirmation"); 
 		
 		

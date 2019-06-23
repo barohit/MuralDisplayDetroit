@@ -56,6 +56,18 @@ public class Mural {
 		this.name = name;
 		this.artistname = artistname;
 	}
+	
+	public Mural(String imgloc, Double latitude, Double longitude, String address, String neighborhood,
+			 String name, String artistname) {
+		super();
+		this.imgloc = imgloc;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.address = address;
+		this.neighborhood = neighborhood;
+		this.name = name;
+		this.artistname = artistname;
+	}
 
 	public String getImgloc() {
 		return imgloc;

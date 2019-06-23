@@ -39,3 +39,13 @@ function validate() {
 		return false;
 		}
 }
+
+function singleInputTypeCheck() {
+	var url = document.getElementsByName("url").value;
+	var picture = document.getElementsByName("picture").value;
+	if (url != null && picture != null) {
+		return false;
+	} else {
+		return true; 
+	}
+}

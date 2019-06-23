@@ -27,9 +27,9 @@
 
 
 <form action="addtofavorites">
-
-<c:forEach items="${list}" var="l">
 	
+	<img src="/Users/rohitbaddam/Documents/Coding/Bootcamp/Labs/MuralDisplayDetroit/src/main/webapp/WEB-INF/views/UserMurals/f_logo_RGB-Hex-Blue_512.png" alt="can't find image">
+<c:forEach items="${list}" var="l">
 	<img src="${l.imgloc}" style ='height:400px'> <br>
 	<a href = "https://www.google.com/maps/dir//${l.address }" target="_blank">${l.address }</a><br>
 	Artist: ${l.artistname }<br>
