@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>User Exists/title>
+<title>User Exists</title>
 </head>
 <body>
-Sorry, this username already exists
+Sorry, this user name already exists
 <a href="create"> Return </a>
 </body>
 </html>
