@@ -21,7 +21,7 @@ function initMarkers(){
  	<c:forEach items="${murals}" var="m">
  	
  		markersOnMap.push({name:"${m.name}",LatLng:[{lat:${m.latitude},lng:${m.longitude}}],
- 				image:"${m.imgloc}", artist:"${m.artistname}", id:${m.muralid}});
+ 				image:"${m.imgloc}", artist:"${m.artistname}", id:${m.muralid}, address:"${m.address}"});
 	</c:forEach>	
 	
 	} 
@@ -37,7 +37,9 @@ function addMarkerInfo(){
 	for (var i = 0; i < markersOnMap.length; i++){
 		
 		var contentStr ="<div><img src="+markersOnMap[i].image+" style ='height:175px'></div><br>"
-		+ markersOnMap[i].name+"<br>"+markersOnMap[i].artist;
+		+ markersOnMap[i].name+"<br>"+markersOnMap[i].artist +"<br>"+markersOnMap[i].address+
+		"<form action='addtofavorites'> Add to favorites? <input type='checkbox' class='favorites' name='favorites[]' value="+markersOnMap[i].id+">"+
+		"<input type='hidden' name='favoritez' value='${userid}' ><input type='submit' value='submitfavorites'></form>";
 		const marker = new google.maps.Marker({
 			position: markersOnMap[i].LatLng[0],
 			map: map

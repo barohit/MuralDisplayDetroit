@@ -97,7 +97,9 @@ public class MuralController {
 		List<Mural> murals = mr.findAll(); 
 		ModelAndView mv = new ModelAndView("artnearme", "murals", murals); 
 		mv.addObject("mapkey", mapkey);
-		
+		if (((Boolean) session.getAttribute("loggedin")) == true) {
+			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
+		}
 		return mv;
 		
 	}
