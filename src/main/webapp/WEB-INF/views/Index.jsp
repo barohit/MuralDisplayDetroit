@@ -17,7 +17,7 @@ body, html {
 .bgimg {
   background-position: center;
   background-size: cover;
-  background-image: url("${pic }");
+  background-image: url("${mural.imgloc }");
   min-height: 75%;
 }
 
@@ -50,18 +50,18 @@ body, html {
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-grayscale-min" id="home">
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
-    <span class="w3-tag">${artist }</span>
+    <span class="w3-tag">Artist: ${mural.artistname }</span>
   </div>
   <div class="w3-display-middle w3-center">
     <span class="w3-text-white" style="font-size:90px">the<br>Detroit Mural App</span>
   </div>
   <div class="w3-display-bottomright w3-center w3-padding-large">
-    <span class="w3-text-white">${name }</span>
+    <span class="w3-text-white">${mural.name }</span>
   </div>
 </header>
-<a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
-<div style="font-family:courier;">Artist: ${artist }</div>
-
+<a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${address }</a><br>
+<%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
+ --%>
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 

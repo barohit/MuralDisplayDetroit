@@ -82,14 +82,15 @@ public class MuralController {
 		Random rand = new Random();
 		int rand1 = rand.nextInt(num);
 		Mural mural = mr.findById(rand1).orElse(null);
-		String pic = mural.getImgloc();
-		String artist = mural.getArtistname();
-		String address = mural.getAddress();
-		String mname = mural.getName();
-		mv.addObject("pic", pic);
-		mv.addObject("artist",artist);
-		mv.addObject("address", address);
-		mv.addObject("name", mname);
+//		String pic = mural.getImgloc();
+//		String artist = mural.getArtistname();
+//		String address = mural.getAddress();
+//		String mname = mural.getName();
+//		mv.addObject("pic", pic);
+//		mv.addObject("artist",artist);
+//		mv.addObject("address", address);
+//		mv.addObject("name", mname);
+		mv.addObject("mural", mural);
 		return mv;
 	}
 	
