@@ -70,11 +70,11 @@ body, html {
   <div class="w3-content" style="max-width:700px">
     <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT THE APP</span></h5>
   
-    <p> We aim to provide a comprehensive collection of all the murals in Detroit. Users can log in to save their favorites and get crowd-sourced recommendations  </p>
+    <p> We aim to provide a comprehensive collection of all the murals in Detroit. Users can log in to save their favorites and get crowd-sourced recommendations based on the favorites they choose </p>
     <div class="w3-panel w3-leftbar w3-light-grey">
-      <p><i>"Art used to be made in the name of faith. We made cathedrals, we made stained-glass windows, we made murals.
+      <p><i>"Art is meant to be shared""
 </i></p>
-      <p>-Julia Cameron</p>
+      <p></p>
     </div>
    
   </div>
