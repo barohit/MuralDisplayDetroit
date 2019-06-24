@@ -415,7 +415,10 @@ map.set('styles',customStyled);
 
 <a href = "/">go back to homepage</a>
 <br>
-<font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink</font>
+<font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink
+<br>
+data obtained from <a href = "https://detroitmopa.org/art"> detroitmopa.org</a> with permission
+</font>
 
 </body>
 </html>
