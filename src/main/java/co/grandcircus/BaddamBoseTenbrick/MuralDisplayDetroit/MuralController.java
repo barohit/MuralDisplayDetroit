@@ -85,9 +85,11 @@ public class MuralController {
 		String pic = mural.getImgloc();
 		String artist = mural.getArtistname();
 		String address = mural.getAddress();
+		String mname = mural.getName();
 		mv.addObject("pic", pic);
 		mv.addObject("artist",artist);
 		mv.addObject("address", address);
+		mv.addObject("name", mname);
 		return mv;
 	}
 	

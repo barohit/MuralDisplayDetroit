@@ -50,13 +50,13 @@ body, html {
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-grayscale-min" id="home">
   <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
-    <span class="w3-tag">aaaaaaa</span>
+    <span class="w3-tag">${artist }</span>
   </div>
   <div class="w3-display-middle w3-center">
     <span class="w3-text-white" style="font-size:90px">the<br>Detroit Mural App</span>
   </div>
   <div class="w3-display-bottomright w3-center w3-padding-large">
-    <span class="w3-text-white">bbbbbbbb</span>
+    <span class="w3-text-white">${name }</span>
   </div>
 </header>
 <a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
@@ -70,10 +70,11 @@ body, html {
   <div class="w3-content" style="max-width:700px">
     <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">ABOUT THE APP</span></h5>
   
-    <p>In addition to our full espresso and brew bar menu, we serve fresh made-to-order breakfast and lunch sandwiches, as well as a selection of sides and salads and other good stuff.</p>
+    <p> We aim to provide a comprehensive collection of all the murals in Detroit. Users can log in to save their favorites and get crowd-sourced recommendations  </p>
     <div class="w3-panel w3-leftbar w3-light-grey">
-      <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
-      <p>Chef, Coffeeist and Owner: Liam Brown</p>
+      <p><i>"Art used to be made in the name of faith. We made cathedrals, we made stained-glass windows, we made murals.
+</i></p>
+      <p>-Julia Cameron</p>
     </div>
    
   </div>
@@ -82,9 +83,9 @@ body, html {
 
 </div>
 <!-- Footer -->
-<footer class="w3-center w3-light-grey w3-padding-48 w3-large">
+<!-- <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-</footer>
+</footer> -->
 
 <script>
 // Tabbed Menu
