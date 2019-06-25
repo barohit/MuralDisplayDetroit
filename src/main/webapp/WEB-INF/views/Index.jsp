@@ -155,12 +155,6 @@ function submitCheckInForm() {
 		fz25.value = z25; 
 		document.getElementById("checkin").submit(); 
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2c0199b3fabc44e23667c288b9aca2b039aef8b4
-
-
 
 </script>
 
