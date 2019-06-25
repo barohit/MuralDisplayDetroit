@@ -147,18 +147,6 @@ function submitCheckInForm() {
 	document.getElementById("checkin").submit(); 
 }
 
-  function submitCheckInForm() {
-		fz24 = document.getElementsByName("lattitude")[0];
-		fz25 = document.getElementsByName("longitude")[0];
-		//alert(" "+fz24);
-		fz24.value = z24;
-		fz25.value = z25; 
-		document.getElementById("checkin").submit(); 
-  }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2c0199b3fabc44e23667c288b9aca2b039aef8b4
 
 
 
