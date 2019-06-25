@@ -130,7 +130,7 @@ function getLocation() {
     return false
   }
 } 
-<<<<<<< HEAD
+
 
 function setPosition(position) {
 	z24 = position.coords.latitude;
@@ -146,7 +146,7 @@ function submitCheckInForm() {
 	alert(fz24.value + " " +  fz25.value + "")
 	document.getElementById("checkin").submit(); 
 }
-=======
+
   function submitCheckInForm() {
 		fz24 = document.getElementsByName("lattitude")[0];
 		fz25 = document.getElementsByName("longitude")[0];
@@ -155,7 +155,7 @@ function submitCheckInForm() {
 		fz25.value = z25; 
 		document.getElementById("checkin").submit(); 
   }
->>>>>>> 4f4e0aa938afa8c6bcb871d2d6bf00a775650683
+
 
 
 

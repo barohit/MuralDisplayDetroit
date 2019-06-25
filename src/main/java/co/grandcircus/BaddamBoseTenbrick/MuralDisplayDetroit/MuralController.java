@@ -294,8 +294,7 @@ public class MuralController {
 		
 	}
 	
-	@RequestMapping("recommendations")
-	public ModelAndView recommendations(HttpSession session) {
+	public ArrayList<Mural> findRecommendations(HttpSession session) {
 		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
 		List<Favorite> userFavorites = fr.findByUserid(userid);
@@ -346,9 +345,6 @@ public class MuralController {
 				commonFavoriteUsers.add(userids.get(i));
 			}
 			 
-			/*for (int l = 0; l < commonFavoriteUsers.size(); l++) {
-			System.out.println(commonFavoriteUsers.get(l));
-			 } */
 		}
 		//Converts the  user favorites to the mural ids
 		ArrayList<Integer> favoriteMuralIds = new ArrayList<Integer>(); 
@@ -374,7 +370,14 @@ public class MuralController {
 			System.out.println(recommendedExtraMurals.get(i));
 			recs.add(mr.getOne(recommendedExtraMurals.get(i)));
 		}
+		return recs; 
 		
+	}
+	
+	@RequestMapping("recommendations")
+	public ModelAndView recommendations(HttpSession session) {
+		
+		ArrayList<Mural> recs = findRecommendations(session);
 		
 		// finally, the list of murals is sent to the jsp page for display. 
 		ModelAndView mv = new ModelAndView("recommendations", "recommendations", recs);
