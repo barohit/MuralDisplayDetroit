@@ -25,7 +25,7 @@ body, html {
   display: none;
 }
 </style>
-<body>
+<body onload="getLocation()">
 
 
 <!-- Links (sit on top) -->
@@ -42,6 +42,14 @@ body, html {
     </div>
     <div class="w3-col s3">
       <a href="/upload_art" class="w3-button w3-block w3-black">UPLOAD ART</a>
+    </div>
+    <div class="w3-col s3">
+    	<form id="checkin" action="/checkin">
+    		<input type="hidden" value="23" name="lattitude">
+    		<input type="hidden" value="12" name="longitude">
+    		<input type="button" onclick="submitCheckInForm()" value="CHECK IN">
+    	</form>
+    	
     </div>
     
   </div>
@@ -62,6 +70,8 @@ body, html {
 <a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
 <div style="font-family:courier;">Artist: ${artist }</div>
 
+
+<p id="demo"> hi </p>
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 
@@ -80,7 +90,7 @@ body, html {
 </div>
 
 
-</div>
+
 <!-- Footer -->
 <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
@@ -88,6 +98,8 @@ body, html {
 
 <script>
 // Tabbed Menu
+var z24 = 0; 
+var z25 = 0; 
 function openMenu(evt, menuName) {
   var i, x, tablinks;
   x = document.getElementsByClassName("menu");
@@ -101,7 +113,34 @@ function openMenu(evt, menuName) {
   document.getElementById(menuName).style.display = "block";
   evt.currentTarget.firstElementChild.className += " w3-dark-grey";
 }
-document.getElementById("myLink").click();
+//document.getElementById("myLink").click();
+
+function setPosition(position) {
+	z24 = position.coords.latitude;
+	z25 = position.coords.longitude; 
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(setPosition);
+    return true
+  } else {
+    z24.innerHTML = "Geolocation is not supported by this browser.";
+    return false
+  }
+} 
+  function submitCheckInForm() {
+		fz24 = document.getElementsByName("lattitude")[0];
+		fz25 = document.getElementsByName("longitude")[0];
+		alert("" + z24 + z25);
+		fz24.value = z24;
+		fz25.value = z25; 
+		alert(fz24.value + fz25.value + "")
+		document.getElementById("checkin").submit(); 
+  }
+
+
+
 </script>
 
 </body>
