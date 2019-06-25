@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -77,17 +79,12 @@ public class MuralController {
 		
 		ModelAndView mv = new ModelAndView("Index");
 		
-		
 		int num = mr.findAll().size();
 		Random rand = new Random();
 		int rand1 = rand.nextInt(num);
 		Mural mural = mr.findById(rand1).orElse(null);
-		String pic = mural.getImgloc();
-		String artist = mural.getArtistname();
-		String address = mural.getAddress();
-		mv.addObject("pic", pic);
-		mv.addObject("artist",artist);
-		mv.addObject("address", address);
+
+		mv.addObject("mural", mural);
 		return mv;
 	}
 	
@@ -190,6 +187,13 @@ public class MuralController {
 		
 		
 	}
+	private static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+	 
+	    BigDecimal bd = new BigDecimal(Double.toString(value));
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
 	
 	@RequestMapping("/checkin")
 	public ModelAndView checkin(@RequestParam("lattitude") String lat, @RequestParam("longitude") String lon) {
@@ -197,18 +201,17 @@ public class MuralController {
 		ArrayList<Double> lattitude = new ArrayList<Double>(); 
 		ArrayList<Double> longitude = new ArrayList<Double>(); 
 		Mural m = null; 
-		System.out.println(lat + "hahahahahaROHit!");
 		for (int i = 0; i < murals.size(); i++) {
-			lattitude.add(murals.get(i).getLatitude());
-			longitude.add(murals.get(i).getLongitude());
+			lattitude.add(round(murals.get(i).getLatitude(), 3));
+			longitude.add(round(murals.get(i).getLongitude(), 3));
 		}
 		int index = 0; 
 		for (int i = 0; i < lattitude.size(); i++) {
-			if (Double.parseDouble(lat) == lattitude.get(i)) {
+			if (round(Double.parseDouble(lat), 3) == lattitude.get(i)) {
 				index = i; 
 			}
 		}
-		if (Double.parseDouble(lon) == longitude.get(index)) {
+		if (round(Double.parseDouble(lon), 3) == longitude.get(index)) {
 			m = murals.get(index); 
 		}
 		return new ModelAndView("CheckIn", "mural", m);
@@ -253,12 +256,8 @@ public class MuralController {
 		
 		ModelAndView mv=new ModelAndView("Index");
 		Mural mural = mr.findById(rand1).orElse(null);
-		String pic = mural.getImgloc();
-		String artist = mural.getArtistname();
-		String address = mural.getAddress();
-		mv.addObject("pic", pic);
-		mv.addObject("artist",artist);
-		mv.addObject("address", address);
+
+		mv.addObject("mural", mural);
 		return mv;
 		 
 	}
