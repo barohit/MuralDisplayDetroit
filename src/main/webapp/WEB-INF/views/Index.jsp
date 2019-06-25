@@ -1,4 +1,3 @@
-t
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -69,7 +68,7 @@ body, html {
   </div>
 </header>
 
-<<<<<<< HEAD
+
 <a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
 <div style="font-family:courier;">Artist: ${artist }</div>
 
@@ -80,14 +79,11 @@ body, html {
 <%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
  --%>
 
-=======
+
 <a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
 <%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
  --%>
 
-
-
->>>>>>> dd8780f57331d88527a4bf6ec542825fda6cc187
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 
@@ -132,13 +128,11 @@ function openMenu(evt, menuName) {
 }
 //document.getElementById("myLink").click();
 
-function setPosition(position) {
-	z24 = position.coords.latitude;
-	z25 = position.coords.longitude; 
-}
+
 
 function getLocation() {
   if (navigator.geolocation) {
+	  alert("allowed");
 	  navigator.geolocation.getCurrentPosition(setPosition);
     return true
   } else {
@@ -146,13 +140,21 @@ function getLocation() {
     return false
   }
 } 
-  function submitCheckInForm() {
-		fz24 = document.getElementsByName("lattitude")[0];
-		fz25 = document.getElementsByName("longitude")[0];
-		fz24.value = z24;
-		fz25.value = z25; 
-		document.getElementById("checkin").submit(); 
-  }
+
+function setPosition(position) {
+	z24 = position.coords.latitude;
+	z25 = position.coords.longitude; 
+	alert("" + z24 + " " + z25);
+}
+
+function submitCheckInForm() {
+	fz24 = document.getElementsByName("lattitude")[0];
+	fz25 = document.getElementsByName("longitude")[0];
+	fz24.value = z24;
+	fz25.value = z25; 
+	alert(fz24.value + " " +  fz25.value + "")
+	document.getElementById("checkin").submit(); 
+}
 
 
 
