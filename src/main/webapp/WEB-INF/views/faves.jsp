@@ -8,10 +8,16 @@
 <title>Favorites</title>
 </head>
 <body>
-	Here are your favorites!
+	<h3>Here are your favorite murals!</h3>
 	<br>
 	<c:forEach items="${faves}" var="f">
 	<img src="${f.imgloc }" style ='height:400px'> <br>
+	
+	${f.name }<br>
+	Artist: ${f.artistname }<br>
+	<a href = "https://www.google.com/maps/dir//${f.address }" target="_blank">${f.address }</a><br>
+	<br>
+	
 	</c:forEach>
 	
 	<a href="userpage"> Return to userpage </a>
