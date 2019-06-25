@@ -67,18 +67,7 @@ body, html {
     <span class="w3-text-white">${mural.name }</span>
   </div>
 </header>
-<<<<<<< HEAD
-
-
-<a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
-<div style="font-family:courier;">Artist: ${artist }</div>
-
-
-<p id="demo"> hi </p>
-
-<a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${address }</a><br>
-<%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
- --%>
+<p id="demo"> </p>
 
 
 <a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
@@ -88,9 +77,7 @@ body, html {
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 
-=======
-<a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
->>>>>>> 4f4e0aa938afa8c6bcb871d2d6bf00a775650683
+
 <!-- About Container -->
 <div class="w3-container" id="about"> 
   <div class="w3-content" style="max-width:800px">
