@@ -194,6 +194,30 @@ public class MuralController {
 		
 	}
 	
+	@RequestMapping("/checkin")
+	public ModelAndView checkin(@RequestParam("lattitude") String lat, @RequestParam("longitude") String lon) {
+		List <Mural> murals = mr.findAll(); 
+		ArrayList<Double> lattitude = new ArrayList<Double>(); 
+		ArrayList<Double> longitude = new ArrayList<Double>(); 
+		Mural m = null; 
+		System.out.println(lat + "hahahahahaROHit!");
+		for (int i = 0; i < murals.size(); i++) {
+			lattitude.add(murals.get(i).getLatitude());
+			longitude.add(murals.get(i).getLongitude());
+		}
+		int index = 0; 
+		for (int i = 0; i < lattitude.size(); i++) {
+			if (Double.parseDouble(lat) == lattitude.get(i)) {
+				index = i; 
+			}
+		}
+		if (Double.parseDouble(lon) == longitude.get(index)) {
+			m = murals.get(index); 
+		}
+		return new ModelAndView("CheckIn", "mural", m);
+		
+	}
+	
 	
 	@RequestMapping("/confirmation")
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
