@@ -67,7 +67,17 @@ body, html {
     <span class="w3-text-white">${mural.name }</span>
   </div>
 </header>
+<p id="demo"> </p>
+
+
 <a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
+<%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
+ --%>
+
+<!-- Add a background color and large text to the whole page 
+<div class="w3-sand w3-grayscale w3-large">-->
+
+
 <!-- About Container -->
 <div class="w3-container" id="about"> 
   <div class="w3-content" style="max-width:800px">
@@ -108,13 +118,11 @@ function openMenu(evt, menuName) {
 }
 //document.getElementById("myLink").click();
 
-function setPosition(position) {
-	z24 = position.coords.latitude;
-	z25 = position.coords.longitude; 
-}
+
 
 function getLocation() {
   if (navigator.geolocation) {
+	  alert("allowed");
 	  navigator.geolocation.getCurrentPosition(setPosition);
     return true
   } else {
@@ -122,6 +130,23 @@ function getLocation() {
     return false
   }
 } 
+<<<<<<< HEAD
+
+function setPosition(position) {
+	z24 = position.coords.latitude;
+	z25 = position.coords.longitude; 
+	alert("" + z24 + " " + z25);
+}
+
+function submitCheckInForm() {
+	fz24 = document.getElementsByName("lattitude")[0];
+	fz25 = document.getElementsByName("longitude")[0];
+	fz24.value = z24;
+	fz25.value = z25; 
+	alert(fz24.value + " " +  fz25.value + "")
+	document.getElementById("checkin").submit(); 
+}
+=======
   function submitCheckInForm() {
 		fz24 = document.getElementsByName("lattitude")[0];
 		fz25 = document.getElementsByName("longitude")[0];
@@ -130,6 +155,7 @@ function getLocation() {
 		fz25.value = z25; 
 		document.getElementById("checkin").submit(); 
   }
+>>>>>>> 4f4e0aa938afa8c6bcb871d2d6bf00a775650683
 
 
 

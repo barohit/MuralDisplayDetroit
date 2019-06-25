@@ -140,7 +140,7 @@ public class MuralController {
 	}
 	
 	@RequestMapping("/neighborhood")
-	public ModelAndView displayNeighborhood() {
+	public ModelAndView displayNeighborhood(HttpSession session) {
 		List<Mural> murals = mr.findAll(); 
 		List<Mural> mural =  mr.findAllByOrderByNeighborhoodAsc();
 			
@@ -155,7 +155,10 @@ public class MuralController {
 		}
 		
 		ModelAndView mv = new ModelAndView("neighborhood","list", neighborhood);
-
+		if  (((Boolean) session.getAttribute("loggedin")) == true) {
+			mv.addObject("userid", ((User)session.getAttribute("user")).getUserid()); 
+		}
+		
 		//mv.addObject("neighbors", mr.findDistinctMurals());
 		return mv;
 	}
