@@ -69,6 +69,7 @@ body, html {
   </div>
 </header>
 
+<<<<<<< HEAD
 <a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
 <div style="font-family:courier;">Artist: ${artist }</div>
 
@@ -79,6 +80,14 @@ body, html {
 <%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
  --%>
 
+=======
+<a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
+<%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
+ --%>
+
+
+
+>>>>>>> dd8780f57331d88527a4bf6ec542825fda6cc187
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 

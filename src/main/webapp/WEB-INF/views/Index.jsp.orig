@@ -1,3 +1,4 @@
+t
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -45,8 +46,8 @@ body, html {
     </div>
     <div class="w3-col s3">
     	<form id="checkin" action="/checkin">
-    		<input type="hidden" value="23" name="lattitude">
-    		<input type="hidden" value="12" name="longitude">
+    		<input type="hidden" value="" name="lattitude">
+    		<input type="hidden" value="" name="longitude">
     		<input type="button" onclick="submitCheckInForm()" value="CHECK IN">
     	</form>
     	
@@ -67,17 +68,26 @@ body, html {
     <span class="w3-text-white">${mural.name }</span>
   </div>
 </header>
+
 <<<<<<< HEAD
 <a href = "https://www.google.com/maps/dir//${address }" target="_blank">${address }</a><br>
 <div style="font-family:courier;">Artist: ${artist }</div>
 
 
 <p id="demo"> hi </p>
-=======
+
 <a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${address }</a><br>
 <%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
  --%>
->>>>>>> ea99b98852e5babd4439d788767a1a8541f776a7
+
+=======
+<a href = "https://www.google.com/maps/dir//${mural.address }" target="_blank">${mural.address }</a><br>
+<%-- <div style="font-family:courier;">Artist: ${mural.artistname }</div>
+ --%>
+
+
+
+>>>>>>> dd8780f57331d88527a4bf6ec542825fda6cc187
 <!-- Add a background color and large text to the whole page 
 <div class="w3-sand w3-grayscale w3-large">-->
 
@@ -139,10 +149,8 @@ function getLocation() {
   function submitCheckInForm() {
 		fz24 = document.getElementsByName("lattitude")[0];
 		fz25 = document.getElementsByName("longitude")[0];
-		alert("" + z24 + z25);
 		fz24.value = z24;
 		fz25.value = z25; 
-		alert(fz24.value + fz25.value + "")
 		document.getElementById("checkin").submit(); 
   }
 
