@@ -149,31 +149,7 @@ public class MuralController {
 		return recs; 
 		
 	}
-	public ArrayList<Mural> addFavorites(String[] favorites, Integer userid) {
-		if (userid != null) {
-			for (int i = 0; i < favorites.length; i++) {
-				try {
-					fr.save(new Favorite(Integer.parseInt(favorites[i]), userid));
-				} catch (DataIntegrityViolationException e) {
-					
-				}
-			}
-			List<Favorite> faves = fr.findByUserid(userid);
-			// converts favorites to murals. 
-			ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
-			for (int i = 0; i < faves.size(); i++) {
-				Optional <Mural> m = mr.findById(faves.get(i).getMuralid());
-				m.ifPresent(mural -> faves2.add(m.get()));
-			}
-			
-			return faves2; 
-		} else {
-			for (int i = 0; i < favorites.length; i++) {
-				fr.save(new Favorite(Integer.parseInt(favorites[i])));
-			}
-			return null; 
-		}
-	}
+	
 	
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
@@ -383,11 +359,41 @@ public class MuralController {
 		 
 	}
 	
+	public ArrayList<Mural> addFavorites(String[] favorites, Integer userid) {
+		if (userid != null) {
+			for (int i = 0; i < favorites.length; i++) {
+				try {
+					fr.save(new Favorite(Integer.parseInt(favorites[i]), userid));
+				} catch (DataIntegrityViolationException e) {
+					
+				}
+			}
+			List<Favorite> faves = fr.findByUserid(userid);
+			// converts favorites to murals. 
+			ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
+			for (int i = 0; i < faves.size(); i++) {
+				Optional <Mural> m = mr.findById(faves.get(i).getMuralid());
+				m.ifPresent(mural -> faves2.add(m.get()));
+			}
+			
+			return faves2; 
+		} else {
+			for (int i = 0; i < favorites.length; i++) {
+				fr.save(new Favorite(Integer.parseInt(favorites[i])));
+			}
+			return null; 
+		}
+	}
+	
 	@RequestMapping("addtofavorites")
-	public ModelAndView displayUserFavorites(@RequestParam("favorites[]") String favorites, @RequestParam("favoritez") Integer userid) {
-		String[] favorites2 = favorites.split(",");
-		addFavorites(favorites2, userid);
-		return new ModelAndView("redirect:/");
+	public ModelAndView displayUserFavorites(@RequestParam(required=false, name="favorites[]") String favorites, @RequestParam("favoritez") Integer userid, HttpSession session) {
+		if (favorites != null) {
+			String[] favorites2 = favorites.split(",");
+			addFavorites(favorites2, userid);
+		}
+		ModelAndView mv = new ModelAndView("redirect:userpage");
+		addUserSession(session, mv); 
+		return mv; 
 		
 	}
 	
