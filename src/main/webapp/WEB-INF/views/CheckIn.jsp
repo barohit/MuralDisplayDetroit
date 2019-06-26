@@ -6,8 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Check In</title>
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/sketchy/bootstrap.min.css" />
+
 </head>
 <body>
 	<%--  <c:if test="${mural.length == 1 }">
