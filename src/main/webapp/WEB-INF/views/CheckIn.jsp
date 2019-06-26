@@ -6,8 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Check In</title>
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/sketchy/bootstrap.min.css" />
+
 </head>
 <body>
 	<%--  <c:if test="${mural.length == 1 }">
@@ -17,7 +16,7 @@
 	<form action="selectionCheckIn">
 		<p style="font-size:18px"> Several murals are nearby. Select which one is yours </p>
 		<c:forEach items="${mural}" var = "m">
-			<img src="${m.imgloc }" style ='height:400px'> <br />
+			<img src="${m.imgloc}" style="height:400px"> <br />
 			<input type="radio" name="selection" value="${m.muralid }"> <br />
 		</c:forEach>
 		<input type="submit" value="check in">

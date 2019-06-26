@@ -1,49 +1,56 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLEncoder;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.TreeSet;
+
+
 import javax.servlet.ServletContext;
 
-import javax.imageio.ImageIO;
+
+
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
+
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckIn;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckInRepository;
@@ -53,6 +60,10 @@ import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.MuralRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.UserRepository;
+
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+
 
 @Controller
 public class MuralController {
@@ -234,8 +245,8 @@ public class MuralController {
 	
 	@RequestMapping("/neighborhood")
 	public ModelAndView displayNeighborhood(HttpSession session) {
-		List<Mural> murals = mr.findAll(); 
-		List<Mural> mural =  mr.findAllByOrderByNeighborhoodAsc();
+
+
 			
 		
 		HashMap<String, List<Mural>> neighborhood = new HashMap<String, List<Mural>>(); 
@@ -267,19 +278,33 @@ public class MuralController {
 	
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
-		
-		String uploadPath = context.getRealPath("/") + "WEB-INF" + File.separator + "views" + File.separator + "UserMurals" + File.separator;
+		File file = null;
 		try {
-			FileCopyUtils.copy(picture.getBytes(), new File(uploadPath+picture.getOriginalFilename()));
+			file = convertMultiPartToFile(picture);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Spring is literal garbage"); 
+			System.out.println("Could not convert");
 		}
-        mr.save(new Mural("" + uploadPath + picture.getOriginalFilename(), 42.335960, -83.049751, address, neighborhood, name, artist));
-		return new ModelAndView("uploadconfirmation"); 
+		BasicAWSCredentials credentials = new BasicAWSCredentials(CommonConstants.ACCESS_KEY_ID, CommonConstants.ACCESS_SEC_KEY);
+		AmazonS3Client.builder();
+		AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_EAST_2).build(); 
+		s3client.putObject("muralbucket", name, file);
+		String imgloc = "https://muralbucket.s3.us-eat-2.amazonaws.com/" + name; 
+		mr.save(new Mural(imgloc, address, neighborhood, name, artist));
+		return new ModelAndView("uploadconfirmation");
+		//headers.add(", headerValue);
 		
 		
 	}
+	
+	private File convertMultiPartToFile(MultipartFile file) throws IOException {
+	    File convFile = new File(file.getOriginalFilename());
+	    FileOutputStream fos = new FileOutputStream(convFile);
+	    fos.write(file.getBytes());
+	    fos.close();
+	    return convFile;
+	}
+	
 	private static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 	 
@@ -288,11 +313,14 @@ public class MuralController {
 	    return bd.doubleValue();
 	}
 	
+	
+	
 	@RequestMapping("selectionCheckIn")
 	public ModelAndView selectionCheckIn(@RequestParam("selection") Integer muralid, HttpSession session) {
 		Mural m = mr.getOne(muralid);
 		if (((Boolean)session.getAttribute("loggedin")) == true) {
 			cr.save(new CheckIn(m.getMuralid(), ((User)session.getAttribute("user")).getUserid()));
+			System.out.println(((User)session.getAttribute("user")).getUserid());
 		} else {
 			cr.save(new CheckIn(m.getMuralid()));
 
