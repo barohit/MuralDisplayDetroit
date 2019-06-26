@@ -45,6 +45,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckIn;
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckInRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.FavoriteRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
@@ -69,6 +71,9 @@ public class MuralController {
 	
 	@Autowired
 	FavoriteRepository fr; 
+	
+	@Autowired
+	CheckInRepository cr; 
 	
 	public ArrayList<Mural> findRecommendations(HttpSession session) {
 		User user = ((User)session.getAttribute("user"));
@@ -284,8 +289,14 @@ public class MuralController {
 	}
 	
 	@RequestMapping("selectionCheckIn")
-	public ModelAndView selectionCheckIn(@RequestParam("selection") Integer muralid) {
+	public ModelAndView selectionCheckIn(@RequestParam("selection") Integer muralid, HttpSession session) {
 		Mural m = mr.getOne(muralid);
+		if (((Boolean)session.getAttribute("loggedin")) == true) {
+			cr.save(new CheckIn(m.getMuralid(), ((User)session.getAttribute("user")).getUserid()));
+		} else {
+			cr.save(new CheckIn(m.getMuralid()));
+
+		}
 		return new ModelAndView("finalCheckIn", "mural", m);
 		
 	}

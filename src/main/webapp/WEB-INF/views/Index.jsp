@@ -146,19 +146,8 @@ function submitCheckInForm() {
 	alert(fz24.value + " " +  fz25.value + "")
 	document.getElementById("checkin").submit(); 
 }
-<<<<<<< HEAD
 
-  function submitCheckInForm() {
-		fz24 = document.getElementsByName("lattitude")[0];
-		fz25 = document.getElementsByName("longitude")[0];
-		//alert(" "+fz24);
-		fz24.value = z24;
-		fz25.value = z25; 
-		document.getElementById("checkin").submit(); 
-  }
 
-=======
->>>>>>> dddfe7501b71675363774c3079b7a7591ea44596
 </script>
 
 </body>
