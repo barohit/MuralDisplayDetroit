@@ -31,12 +31,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -52,6 +53,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.Json.Location;
+import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.Json.Result;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckIn;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckInRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
@@ -281,6 +284,20 @@ public class MuralController {
 	
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
+		RestTemplate rt = new RestTemplate(); 
+		
+		//converts address to a String
+		String[] addrss = address.split(" ");
+		String add = ""; 
+		for (int i = 0; i < addrss.length; i++) {
+			add += addrss[i];
+			if (i != addrss.length - 1) {
+				add += "+";
+			}
+		}
+		
+		//converts address to lattitude and longtitude in order to add to the database using google maps API
+		Result res = rt.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + mapkey, Result.class);
 		File file = null;
 		try {
 			file = convertMultiPartToFile(picture);
@@ -288,14 +305,17 @@ public class MuralController {
 			// TODO Auto-generated catch block
 			System.out.println("Could not convert");
 		}
+		
+		//uploads the image to S3 on our AWS server in order to retrieve a URL; 
 		BasicAWSCredentials credentials = new BasicAWSCredentials(CommonConstants.ACCESS_KEY_ID, CommonConstants.ACCESS_SEC_KEY);
 		AmazonS3Client.builder();
 		AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_EAST_2).build(); 
 		s3client.putObject("muralbucket", name, file);
-		String imgloc = "https://muralbucket.s3.us-eat-2.amazonaws.com/" + name; 
-		mr.save(new Mural(imgloc, address, neighborhood, name, artist));
-		return new ModelAndView("uploadconfirmation");
-		//headers.add(", headerValue);
+		
+		//fetches the url and adds the new mural to the database
+		String imgloc = "https://muralbucket.s3.us-east-2.amazonaws.com/" + name; 
+		mr.save(new Mural(imgloc, res.getResults()[0].getGeometry().getLocation().getLat(), res.getResults()[0].getGeometry().getLocation().getLng(), address, neighborhood, name, artist));
+		return new ModelAndView("uploadconfirmation", "location", imgloc);
 		
 		
 	}

@@ -7,6 +7,7 @@
 <title>Congrats</title>
 </head>
 <body>
-	<p style="font-size:18px">Congratulations, you have uploaded an image!</p>
+	<p style="font-size:18px">Congratulations, you have uploaded a mural!</p>
+	<img src="${location}">
 </body>
 </html>
