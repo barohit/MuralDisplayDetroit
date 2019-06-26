@@ -9,10 +9,6 @@
 
 </head>
 <body>
-	<%--  <c:if test="${mural.length == 1 }">
-		<img src="${mural[0].imgloc }">
-		<p id="error"> Congratulations, you have checked in at ${mural[0].name }! </p>
-	</c:if> --%>
 	<form action="selectionCheckIn">
 		<p style="font-size:18px"> Several murals are nearby. Select which one is yours </p>
 		<c:forEach items="${mural}" var = "m">

@@ -122,7 +122,6 @@ function openMenu(evt, menuName) {
 
 function getLocation() {
   if (navigator.geolocation) {
-	  //alert("allowed");
 	  navigator.geolocation.getCurrentPosition(setPosition);
     return true
   } else {
@@ -135,9 +134,10 @@ function getLocation() {
 function setPosition(position) {
 	z24 = position.coords.latitude;
 	z25 = position.coords.longitude; 
-	//alert("" + z24 + " " + z25);
 }
 
+//needed because a separate function is needed to change the values from submitting the form
+//due to the immediately of going to the controller. 
 function submitCheckInForm() {
 	fz24 = document.getElementsByName("lattitude")[0];
 	fz25 = document.getElementsByName("longitude")[0];

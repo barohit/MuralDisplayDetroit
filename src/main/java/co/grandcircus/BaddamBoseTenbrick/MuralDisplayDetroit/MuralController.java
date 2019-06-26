@@ -60,14 +60,17 @@ public class MuralController {
 	CheckInRepository cr; 
 	
 	public ArrayList<Mural> findRecommendations(HttpSession session) {
+		
+		// Gets a list of favorites for the user in question. 
 		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
 		List<Favorite> userFavorites = fr.findByUserid(userid);
-		//It maps the user_id with list of favorites 
+		
+		//HashMap maps the user_id of all users with a corresponding list of favorites 
 		HashMap<Integer, List<Favorite>> favoriteLists = new HashMap<Integer, List<Favorite>>(); 
 		List<Favorite> everything = fr.findAll(); 
 
-		//List of userid's for reference 
+		//List of all userid's for reference 
 		ArrayList<Integer> userids = new ArrayList<Integer>();
 		//List of users that have a lot of common favorites
 		ArrayList<Integer> commonFavoriteUsers = new ArrayList<Integer>(); 
@@ -82,10 +85,7 @@ public class MuralController {
 			favoriteLists.put(userids.get(i), fr.findByUserid(userids.get(i)));
 		}
 		
-		/* for (int i = 0; i < favoriteLists.size(); i++) {
-			System.out.println(favoriteLists.get(userids.get(i)));
-		} */
-		
+	
 		 
 		for (int i = 0; i < favoriteLists.size(); i++) {
 			int commonCount = 0;
@@ -97,7 +97,8 @@ public class MuralController {
 			} else {
 				smallerListSize = favoriteLists.get(userids.get(i)).size();
 			}
-			//counts the number of common favorites
+			//counts the number of common favorites by looping through user favorites and comparing to each element in the 
+			//corresponding other user's favorites
 			for (int j = 0; j < favoriteLists.get(userids.get(i)).size(); j++) {
 				for (int k = 0; k < userFavorites.size(); k++) {
 					if (favoriteLists.get(userids.get(i)).get(j).getMuralid() == userFavorites.get(k).getMuralid()) {
@@ -111,7 +112,7 @@ public class MuralController {
 			}
 			 
 		}
-		//Converts the  user favorites to the mural ids
+		//Converts the user favorites to the mural ids
 		ArrayList<Integer> favoriteMuralIds = new ArrayList<Integer>(); 
 		for (int i = 0; i < userFavorites.size(); i++) {
 			favoriteMuralIds.add(userFavorites.get(i).getMuralid());
@@ -150,6 +151,7 @@ public class MuralController {
 		
 		ModelAndView mv = new ModelAndView("Index");
 		
+		//creates an index to find a random mural to display on the home page. 
 		int num = mr.findAll().size();
 		Random rand = new Random();
 		int rand1 = rand.nextInt(num);
@@ -160,6 +162,8 @@ public class MuralController {
 	}
 	
 
+	//checking to see if the user is logged in before passing the user as an object is commonpace
+	//so an additional method was created. 
 	public void addUserSession(HttpSession session, ModelAndView mv) {
 		if (((Boolean) session.getAttribute("loggedin")) == true) {
 			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
@@ -234,7 +238,8 @@ public class MuralController {
 	}
 	@RequestMapping("/artist")
 	public ModelAndView displayArtist(HttpSession session) {
-				
+			
+		//maps each artist to a list of their murals
 		HashMap<String, List<Mural>> artist = new HashMap<String, List<Mural>>(); 
 		List<String> nlist = mr.findDistinctArtist();
 		
@@ -265,7 +270,7 @@ public class MuralController {
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
 		RestTemplate rt = new RestTemplate(); 
 
-		//converts address to a String
+		//converts address to a String to use in the API request endpoint URL
 		String[] addrss = address.split(" ");
 		String add = ""; 
 		for (int i = 0; i < addrss.length; i++) {
@@ -299,6 +304,7 @@ public class MuralController {
 	
 	}
 	
+	//needed because uploaded files are Multipart by default in Spring
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
 	    File convFile = new File(file.getOriginalFilename());
 	    FileOutputStream fos = new FileOutputStream(convFile);
@@ -307,6 +313,7 @@ public class MuralController {
 	    return convFile;
 	}
 	
+	//needed for accuracy with the Checkin function as browser geolocation is relatively imprecise
 	private static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 	 
@@ -315,6 +322,7 @@ public class MuralController {
 	    return bd.doubleValue();
 	}
 	
+	//used to keep track of checkins
 	@RequestMapping("selectionCheckIn")
 	public ModelAndView selectionCheckIn(@RequestParam("selection") Integer muralid, HttpSession session) {
 		Mural m = mr.getOne(muralid);
@@ -327,17 +335,21 @@ public class MuralController {
 		return new ModelAndView("finalCheckIn", "mural", m);
 		
 	}
+	
+	
 	@RequestMapping("/checkin")
 	public ModelAndView checkin(@RequestParam("lattitude") String lat, @RequestParam("longitude") String lon) {
 		List <Mural> murals = mr.findAll(); 
 		ArrayList<Double> lattitude = new ArrayList<Double>(); 
 		ArrayList<Double> longitude = new ArrayList<Double>(); 
 		ArrayList<Mural> m = new ArrayList<Mural>(); 
+		//needed to round for comparison. 
 		for (int i = 0; i < murals.size(); i++) {
 			lattitude.add(round(murals.get(i).getLatitude(), 3));
 			longitude.add(round(murals.get(i).getLongitude(), 3));
 		}
 		int index = 0; 
+		//again rounds for comparison and compares each to find a list of close enough murals. 
 		for (int i = 0; i < lattitude.size(); i++) {
 			if (round(Double.parseDouble(lat), 3) == lattitude.get(i)) {
 				index = i; 
@@ -415,6 +427,7 @@ public class MuralController {
 			}
 			
 			return faves2; 
+			//if user is not logged in, null is returned as it will not be needed
 		} else {
 			for (int i = 0; i < favorites.length; i++) {
 				fr.save(new Favorite(Integer.parseInt(favorites[i])));
@@ -452,6 +465,7 @@ public class MuralController {
 	@RequestMapping("addrecs")
 	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("user") Integer userid) {
 		String[] murals = muralid.split(",");
+		//parses into multiple muralids and then makes an array of integers. 
 		Integer[] muralids = new Integer[murals.length];
 		for (int i = 0; i < murals.length; i++) {
 			muralids[i] = Integer.parseInt(murals[i]);
