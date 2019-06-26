@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Congrats</title>
 </head>
 <body>
-	Congratulations, you have uploaded an image!
+	<p style="font-size:18px">Congratulations, you have uploaded an image!</p>
 </body>
 </html>

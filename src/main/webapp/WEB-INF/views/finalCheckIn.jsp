@@ -4,10 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Checked in Mural</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/sketchy/bootstrap.min.css" />
+</head>
 </head>
 <body>
 	<img src="${mural.imgloc }">
-	<p> Congratulations, you have checked in at ${mural.name }! </p>
+	<p style="font-size:18px"> Congratulations, you have checked in at ${mural.name }! </p>
+	<p style="font-size:18px">	<a href = "/">Back to home page</a></p>
+	
 </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 function userNameValidate(){
 	var username=document.getElementsByName("username")[0].value;
 	console.log(username);
