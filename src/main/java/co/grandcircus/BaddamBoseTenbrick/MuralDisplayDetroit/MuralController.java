@@ -1,56 +1,49 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
-
-import java.io.ByteArrayInputStream;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-
+import java.util.TreeSet;
 import javax.servlet.ServletContext;
 
-
-
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.Part;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckIn;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckInRepository;
@@ -60,10 +53,6 @@ import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Mural;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.MuralRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.User;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.UserRepository;
-
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentials;
-
 
 @Controller
 public class MuralController {
@@ -86,8 +75,6 @@ public class MuralController {
 	@Autowired
 	CheckInRepository cr; 
 	
-	//method to get recommendations for a user
-	//returns a list of murals
 	public ArrayList<Mural> findRecommendations(HttpSession session) {
 		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
@@ -152,7 +139,7 @@ public class MuralController {
 			List<Favorite> entryFavorites = fr.findByUserid(commonFavoriteUsers.get(i));
 			for (int j = 0; j < entryFavorites.size(); j++) {
 				//for each of the favorites in that user's list, if the current user does NOT have that as a favorite, it is added to a recommended favorites list
-				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid())) && !(recommendedExtraMurals.contains(entryFavorites.get(j).getMuralid()))) {
+				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid()))) {
 					recommendedExtraMurals.add(entryFavorites.get(j).getMuralid());
 				}
 			}
@@ -168,7 +155,7 @@ public class MuralController {
 		
 	}
 	
-	//homepage. displays a random mural as background
+	
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
 		if (((Integer) session.getAttribute("counter")) == null) {
@@ -195,7 +182,6 @@ public class MuralController {
 		}
 	}
 	
-	//directs to a map of murals
 	@RequestMapping("/art_near_me")
 	public ModelAndView displayArt(HttpSession session) {
 		List<Mural> murals = mr.findAll(); 
@@ -248,25 +234,36 @@ public class MuralController {
 	
 	@RequestMapping("/neighborhood")
 	public ModelAndView displayNeighborhood(HttpSession session) {
-
-
-			
-		
+				
 		HashMap<String, List<Mural>> neighborhood = new HashMap<String, List<Mural>>(); 
 		List<String> nlist = mr.findDistinctNeighborhood();
 		
 		for(int i=0;i< nlist.size();i++) {
 			neighborhood.put(nlist.get(i), mr.findAllByNeighborhood(nlist.get(i)));	
-			//neighborhood.put(mural.get(i), murals.get(i));
-			//System.out.println(Arrays.asList(neighborhood));
+			
 		}
 		
 		ModelAndView mv = new ModelAndView("neighborhood","list", neighborhood);
 		addUserSession(session, mv);
 		
-		//mv.addObject("neighbors", mr.findDistinctMurals());
 		return mv;
 	}
+	@RequestMapping("/artist")
+	public ModelAndView displayArtist(HttpSession session) {
+				
+		HashMap<String, List<Mural>> artist = new HashMap<String, List<Mural>>(); 
+		List<String> nlist = mr.findDistinctArtist();
+		
+		for(int i=0;i< nlist.size();i++) {
+			artist.put(nlist.get(i), mr.findAllByArtistname(nlist.get(i)));	
+			}
+		
+		ModelAndView mv = new ModelAndView("artist","list", artist);
+		addUserSession(session, mv);
+				
+		return mv;
+	}
+	
 	@RequestMapping("/display_all_art")
 	public ModelAndView displayAllArt(HttpSession session) {
 		ModelAndView mv = new ModelAndView("displayallart", "list", mr.findAll());
@@ -281,33 +278,19 @@ public class MuralController {
 	
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
-		File file = null;
+		
+		String uploadPath = context.getRealPath("/") + "WEB-INF" + File.separator + "views" + File.separator + "UserMurals" + File.separator;
 		try {
-			file = convertMultiPartToFile(picture);
+			FileCopyUtils.copy(picture.getBytes(), new File(uploadPath+picture.getOriginalFilename()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Could not convert");
+			System.out.println("Spring is literal garbage"); 
 		}
-		BasicAWSCredentials credentials = new BasicAWSCredentials(CommonConstants.ACCESS_KEY_ID, CommonConstants.ACCESS_SEC_KEY);
-		AmazonS3Client.builder();
-		AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_EAST_2).build(); 
-		s3client.putObject("muralbucket", name, file);
-		String imgloc = "https://muralbucket.s3.us-eat-2.amazonaws.com/" + name; 
-		mr.save(new Mural(imgloc, address, neighborhood, name, artist));
-		return new ModelAndView("uploadconfirmation");
-		//headers.add(", headerValue);
+        mr.save(new Mural("" + uploadPath + picture.getOriginalFilename(), 42.335960, -83.049751, address, neighborhood, name, artist));
+		return new ModelAndView("uploadconfirmation"); 
 		
 		
 	}
-	
-	private File convertMultiPartToFile(MultipartFile file) throws IOException {
-	    File convFile = new File(file.getOriginalFilename());
-	    FileOutputStream fos = new FileOutputStream(convFile);
-	    fos.write(file.getBytes());
-	    fos.close();
-	    return convFile;
-	}
-	
 	private static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 	 
@@ -316,14 +299,11 @@ public class MuralController {
 	    return bd.doubleValue();
 	}
 	
-	
-	
 	@RequestMapping("selectionCheckIn")
 	public ModelAndView selectionCheckIn(@RequestParam("selection") Integer muralid, HttpSession session) {
 		Mural m = mr.getOne(muralid);
 		if (((Boolean)session.getAttribute("loggedin")) == true) {
 			cr.save(new CheckIn(m.getMuralid(), ((User)session.getAttribute("user")).getUserid()));
-			System.out.println(((User)session.getAttribute("user")).getUserid());
 		} else {
 			cr.save(new CheckIn(m.getMuralid()));
 
@@ -383,23 +363,6 @@ public class MuralController {
 		return new ModelAndView("faves", "faves", faves2);
 	}
 	
-	//show checked in murals for user
-	@RequestMapping("displaycheckins")
-	public ModelAndView checkedinMuralsPerUser(@RequestParam("user") Integer id) {
-		List<CheckIn> checkins = cr.findByUserid(id);
-		ArrayList<Mural> checkins2 = new ArrayList<Mural>(); 
-		for (int i = 0; i < checkins.size(); i++) {
-			//Optional is an advanced hibernate Query class which represents the possibility of a mural 
-			//being found by the query
-			Optional <Mural> m = mr.findById(checkins.get(i).getMuralid());
-			// this takes a function as an argument and executes only if the mural. 
-			m.ifPresent(mural -> checkins2.add(m.get()));
-		}
-		
-		return new ModelAndView("displaycheckin", "check", checkins2);
-	}
-	
-	
 	@RequestMapping("logout") 
 	public ModelAndView logout(HttpSession session) {
 		session.setAttribute("loggedin", false);
@@ -417,7 +380,7 @@ public class MuralController {
 		return mv;
 		 
 	}
-	//method to add favorites for a user
+	
 	public ArrayList<Mural> addFavorites(String[] favorites, Integer userid) {
 		if (userid != null) {
 			for (int i = 0; i < favorites.length; i++) {
@@ -469,7 +432,7 @@ public class MuralController {
 		return mv; 
 		
 	}
-	//add a mural to favorites
+	
 	@RequestMapping("addrecs")
 	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("user") Integer userid) {
 		String[] murals = muralid.split(",");
@@ -483,15 +446,14 @@ public class MuralController {
 		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 	}
 	//remove a mural from favorites
-		@RequestMapping("deletefav")
-		public ModelAndView deletefav(HttpSession session, @RequestParam("muralid") Integer muralid, @RequestParam("user") Integer userid) {
-			for (Favorite f : fr.findByUserid(userid)) {
-				if (muralid == f.getMuralid()) {
-					fr.deleteById(f.getId());
+			@RequestMapping("deletefav")
+			public ModelAndView deletefav(HttpSession session, @RequestParam("muralid") Integer muralid, @RequestParam("user") Integer userid) {
+				for (Favorite f : fr.findByUserid(userid)) {
+					if (muralid == f.getMuralid()) {
+						fr.deleteById(f.getId());
+					}
 				}
+				
+				return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 			}
-			
-			return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
-		}
-	
 }

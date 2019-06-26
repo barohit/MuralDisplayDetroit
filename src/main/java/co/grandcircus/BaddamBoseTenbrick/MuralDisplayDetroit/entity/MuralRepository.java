@@ -3,7 +3,7 @@ package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity;
 
 
 import java.util.List;
-import java.util.TreeSet;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,13 +20,14 @@ public interface MuralRepository extends JpaRepository<Mural, Integer> {
 	@Query(nativeQuery=true, value="UPDATE murals SET murals.favoritecount = :favorite WHERE muralid = :muralid")
 	int updateFavoriteCount(@Param("favorite") Integer favoriteCount, @Param("muralid") Integer muralid);
 	
-	//@Query("SELECT * FROM murals ORDER BY neighborhood ")
-	List<Mural> findAllByOrderByNeighborhoodAsc();
-	
+		
 	List<Mural> findAllByNeighborhood(String neighborhood);
+	List<Mural> findAllByArtistname(String artistname);
 	
 	@Query(value="SELECT DISTINCT neighborhood FROM murals",nativeQuery=true)
 	List<String> findDistinctNeighborhood();
-
+	
+	@Query(value="SELECT DISTINCT artistname FROM murals ORDER BY artistname asc",nativeQuery=true)
+	List<String> findDistinctArtist();
 
 }
