@@ -147,10 +147,6 @@ function submitCheckInForm() {
 	document.getElementById("checkin").submit(); 
 }
 
-<<<<<<< HEAD
-
-
-=======
   function submitCheckInForm() {
 		fz24 = document.getElementsByName("lattitude")[0];
 		fz25 = document.getElementsByName("longitude")[0];
@@ -159,7 +155,6 @@ function submitCheckInForm() {
 		fz25.value = z25; 
 		document.getElementById("checkin").submit(); 
   }
->>>>>>> 5c7f20cd2046f7371d9b938ce384628ce371487b
 
 </script>
 
