@@ -15,7 +15,7 @@
 	<form action="selectionCheckIn">
 		<p> Several murals are nearby. Select which one is yours </p>
 		<c:forEach items="${mural}" var = "m">
-			<img src="${m.imgloc }"> <br />
+			<img src="${m.imgloc }" style ='height:400px'> <br />
 			<input type="radio" name="selection" value="${m.muralid }"> <br />
 		</c:forEach>
 		<input type="submit" value="check in">
