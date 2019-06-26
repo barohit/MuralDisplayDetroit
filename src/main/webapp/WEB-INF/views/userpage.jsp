@@ -34,6 +34,11 @@ input.submit_hyperlink:hover{
 	<p style="font-size:18px"><a href="/art_near_me">Art Near Me</a></p>
 	<p style="font-size:18px"><a href="display_all_art"> Add favorites: </a></p>
 	<p style="font-size:18px">	<a href="recommendations"> Recommendations </a></p>
+	<form action="displaycheckins">
+		<input type="hidden" value="${user.userid}" name="user">
+		<input type="submit" value="Murals I've checked in to" class="submit_hyperlink" value="submit this form"/>
+		
+	</form><br>
 	<p style="font-size:18px">	<a href = "/">Back to home page</a></p>
 	<p style="font-size:18px"><a href="logout"> Log Out </a></p>
 

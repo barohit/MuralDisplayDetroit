@@ -86,6 +86,8 @@ public class MuralController {
 	@Autowired
 	CheckInRepository cr; 
 	
+	//method to get recommendations for a user
+	//returns a list of murals
 	public ArrayList<Mural> findRecommendations(HttpSession session) {
 		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
@@ -150,7 +152,7 @@ public class MuralController {
 			List<Favorite> entryFavorites = fr.findByUserid(commonFavoriteUsers.get(i));
 			for (int j = 0; j < entryFavorites.size(); j++) {
 				//for each of the favorites in that user's list, if the current user does NOT have that as a favorite, it is added to a recommended favorites list
-				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid()))) {
+				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid())) && !(recommendedExtraMurals.contains(entryFavorites.get(j).getMuralid()))) {
 					recommendedExtraMurals.add(entryFavorites.get(j).getMuralid());
 				}
 			}
@@ -166,7 +168,7 @@ public class MuralController {
 		
 	}
 	
-	
+	//homepage. displays a random mural as background
 	@RequestMapping("/")
 	public ModelAndView homeTest(HttpSession session) {
 		if (((Integer) session.getAttribute("counter")) == null) {
@@ -193,6 +195,7 @@ public class MuralController {
 		}
 	}
 	
+	//directs to a map of murals
 	@RequestMapping("/art_near_me")
 	public ModelAndView displayArt(HttpSession session) {
 		List<Mural> murals = mr.findAll(); 
@@ -380,6 +383,23 @@ public class MuralController {
 		return new ModelAndView("faves", "faves", faves2);
 	}
 	
+	//show checked in murals for user
+	@RequestMapping("displaycheckins")
+	public ModelAndView checkedinMuralsPerUser(@RequestParam("user") Integer id) {
+		List<CheckIn> checkins = cr.findByUserid(id);
+		ArrayList<Mural> checkins2 = new ArrayList<Mural>(); 
+		for (int i = 0; i < checkins.size(); i++) {
+			//Optional is an advanced hibernate Query class which represents the possibility of a mural 
+			//being found by the query
+			Optional <Mural> m = mr.findById(checkins.get(i).getMuralid());
+			// this takes a function as an argument and executes only if the mural. 
+			m.ifPresent(mural -> checkins2.add(m.get()));
+		}
+		
+		return new ModelAndView("displaycheckin", "check", checkins2);
+	}
+	
+	
 	@RequestMapping("logout") 
 	public ModelAndView logout(HttpSession session) {
 		session.setAttribute("loggedin", false);
@@ -397,7 +417,7 @@ public class MuralController {
 		return mv;
 		 
 	}
-	
+	//method to add favorites for a user
 	public ArrayList<Mural> addFavorites(String[] favorites, Integer userid) {
 		if (userid != null) {
 			for (int i = 0; i < favorites.length; i++) {
@@ -449,7 +469,7 @@ public class MuralController {
 		return mv; 
 		
 	}
-	
+	//add a mural to favorites
 	@RequestMapping("addrecs")
 	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("user") Integer userid) {
 		String[] murals = muralid.split(",");
@@ -462,4 +482,16 @@ public class MuralController {
 		}
 		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 	}
+	//remove a mural from favorites
+		@RequestMapping("deletefav")
+		public ModelAndView deletefav(HttpSession session, @RequestParam("muralid") Integer muralid, @RequestParam("user") Integer userid) {
+			for (Favorite f : fr.findByUserid(userid)) {
+				if (muralid == f.getMuralid()) {
+					fr.deleteById(f.getId());
+				}
+			}
+			
+			return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
+		}
+	
 }

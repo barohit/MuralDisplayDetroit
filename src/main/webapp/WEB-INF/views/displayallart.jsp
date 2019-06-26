@@ -7,12 +7,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>All Art</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/lux/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="design2.css" />
 </head>
 
 <body>
 
-<h2>Gallery</h2>
+<p style="font-size:35px">Gallery</p>
 
  
 <div class="dropdown">
@@ -20,8 +22,8 @@
   <div class="dropdown-content">
 
 	<a href="neighborhood">Neighborhood</a>
-	 <a href="#">Year</a>
-  <a href="#">Artist</a>
+	
+  <a href="artist">Artist</a>
   </div>
 </div>
 
