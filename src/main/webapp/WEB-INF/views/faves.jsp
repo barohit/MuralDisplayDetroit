@@ -18,7 +18,13 @@
 	${f.name }<br>
 	Artist: ${f.artistname }<br>
 	<a href = "https://www.google.com/maps/dir//${f.address }" target="_blank">${f.address }</a><br>
+	<form action="deletefav">
+		<input type="hidden" name="muralid" value="${f.muralid}">
+		<input type="hidden" name="user" value="${user.userid}">
+		<input type="submit" value="Remove this from Favorites">
+	</form>
 	<br>
+	
 	
 	</c:forEach>
 	
