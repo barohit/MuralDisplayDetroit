@@ -1,71 +1,34 @@
 package co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.TreeSet;
 import javax.servlet.ServletContext;
-
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-<<<<<<< HEAD
-import org.springframework.http.HttpHeaders;
-=======
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
->>>>>>> 9f6cc9e89b5d4631e0c5668e8ec7bbb6cefb2f85
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-<<<<<<< HEAD
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-
-import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.Json.Location;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.Json.Result;
-=======
->>>>>>> 9f6cc9e89b5d4631e0c5668e8ec7bbb6cefb2f85
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckIn;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.CheckInRepository;
 import co.grandcircus.BaddamBoseTenbrick.MuralDisplayDetroit.entity.Favorite;
@@ -297,11 +260,11 @@ public class MuralController {
 		return new ModelAndView("uploadArt"); 
 	}
 	
+	
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
-<<<<<<< HEAD
 		RestTemplate rt = new RestTemplate(); 
-		
+
 		//converts address to a String
 		String[] addrss = address.split(" ");
 		String add = ""; 
@@ -311,39 +274,39 @@ public class MuralController {
 				add += "+";
 			}
 		}
-		
+
 		//converts address to lattitude and longtitude in order to add to the database using google maps API
 		Result res = rt.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + mapkey, Result.class);
 		File file = null;
-=======
-		
-		String uploadPath = context.getRealPath("/") + "WEB-INF" + File.separator + "views" + File.separator + "UserMurals" + File.separator;
->>>>>>> 9f6cc9e89b5d4631e0c5668e8ec7bbb6cefb2f85
 		try {
-			FileCopyUtils.copy(picture.getBytes(), new File(uploadPath+picture.getOriginalFilename()));
+			file = convertMultiPartToFile(picture);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Spring is literal garbage"); 
+			System.out.println("Could not convert");
 		}
-<<<<<<< HEAD
-		
+
 		//uploads the image to S3 on our AWS server in order to retrieve a URL; 
 		BasicAWSCredentials credentials = new BasicAWSCredentials(CommonConstants.ACCESS_KEY_ID, CommonConstants.ACCESS_SEC_KEY);
 		AmazonS3Client.builder();
 		AmazonS3 s3client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_EAST_2).build(); 
 		s3client.putObject("muralbucket", name, file);
 		
+
 		//fetches the url and adds the new mural to the database
 		String imgloc = "https://muralbucket.s3.us-east-2.amazonaws.com/" + name; 
 		mr.save(new Mural(imgloc, res.getResults()[0].getGeometry().getLocation().getLat(), res.getResults()[0].getGeometry().getLocation().getLng(), address, neighborhood, name, artist));
 		return new ModelAndView("uploadconfirmation", "location", imgloc);
-=======
-        mr.save(new Mural("" + uploadPath + picture.getOriginalFilename(), 42.335960, -83.049751, address, neighborhood, name, artist));
-		return new ModelAndView("uploadconfirmation"); 
->>>>>>> 9f6cc9e89b5d4631e0c5668e8ec7bbb6cefb2f85
-		
-		
+	
 	}
+	
+	private File convertMultiPartToFile(MultipartFile file) throws IOException {
+	    File convFile = new File(file.getOriginalFilename());
+	    FileOutputStream fos = new FileOutputStream(convFile);
+	    fos.write(file.getBytes());
+	    fos.close();
+	    return convFile;
+	}
+	
 	private static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
 	 
@@ -499,14 +462,14 @@ public class MuralController {
 		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 	}
 	//remove a mural from favorites
-			@RequestMapping("deletefav")
-			public ModelAndView deletefav(HttpSession session, @RequestParam("muralid") Integer muralid, @RequestParam("user") Integer userid) {
-				for (Favorite f : fr.findByUserid(userid)) {
-					if (muralid == f.getMuralid()) {
-						fr.deleteById(f.getId());
-					}
-				}
-				
-				return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
+	@RequestMapping("deletefav")
+	public ModelAndView deletefav(HttpSession session, @RequestParam("muralid") Integer muralid, @RequestParam("user") Integer userid) {
+		for (Favorite f : fr.findByUserid(userid)) {
+			if (muralid == f.getMuralid()) {
+				fr.deleteById(f.getId());
 			}
+		}
+		
+		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
+	}
 }
