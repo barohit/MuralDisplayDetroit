@@ -335,7 +335,16 @@ public class MuralController {
 		
 	}
 	
-	
+	@RequestMapping("displaycheckins") 
+	public ModelAndView displayUserCheckins(@RequestParam("user") Integer userid) {
+		List<CheckIn> checkins = cr.findByUserid(userid);
+		ArrayList<Mural> murals = new ArrayList<Mural>(); 
+		for (int i = 0; i < checkins.size(); i++) {
+			Optional<Mural> m = mr.findById(checkins.get(i).getMuralid()); 
+			m.ifPresent(Mural -> murals.add(m.get()));
+		}
+		return new ModelAndView("usercheckins", "murals", murals);
+	}
 	@RequestMapping("/checkin")
 	public ModelAndView checkin(@RequestParam("lattitude") String lat, @RequestParam("longitude") String lon) {
 		List <Mural> murals = mr.findAll(); 
