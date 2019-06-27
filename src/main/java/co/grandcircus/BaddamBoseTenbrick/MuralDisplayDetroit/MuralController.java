@@ -125,7 +125,7 @@ public class MuralController {
 			List<Favorite> entryFavorites = fr.findByUserid(commonFavoriteUsers.get(i));
 			for (int j = 0; j < entryFavorites.size(); j++) {
 				//for each of the favorites in that user's list, if the current user does NOT have that as a favorite, it is added to a recommended favorites list
-				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid()))) {
+				if (!(favoriteMuralIds.contains(entryFavorites.get(j).getMuralid())) &&  !(recommendedExtraMurals.contains(entryFavorites.get(j).getMuralid()))) {
 					recommendedExtraMurals.add(entryFavorites.get(j).getMuralid());
 				}
 			}
