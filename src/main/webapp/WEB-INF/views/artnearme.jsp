@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Art near me</title>
-<script src="markerclusterer.js"  type="text/javascript" ></script>
+<script src="markerclusterer.js" type="text/javascript"></script>
 <script>
 var map;
 var markersOnMap=[];
@@ -433,22 +433,22 @@ map.set('styles',customStyled);
 
 </head>
 <body>
-<h1>Murals in Detroit</h1>
+	<h1>Murals in Detroit</h1>
 
 
-<div id="map" style="width:100%;height:420px;"></div>
-<!--  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+	<div id="map" style="width: 100%; height: 420px;"></div>
+	<!--  <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
     </script> -->
-<script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}"></script>
-<br>
+	<script src="https://maps.googleapis.com/maps/api/js?key=${mapkey}"></script>
+	<br>
 
 
-<a href = "/">go back to homepage</a>
-<br>
-<font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink
-<br>
-data obtained from <a href = "https://detroitmopa.org/art"> detroitmopa.org</a> with permission
-</font>
+	<a href="/">go back to homepage</a>
+	<br>
+	<font size="1">by Rohit Baddam, Kuruvilla Bose & Nick TenBrink <br>
+		data obtained from <a href="https://detroitmopa.org/art">
+			detroitmopa.org</a> with permission
+	</font>
 
 </body>
 </html>

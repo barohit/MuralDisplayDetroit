@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +9,9 @@
 	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/sketchy/bootstrap.min.css" />
 </head>
 <body>
-	<p style="font-size:18px">Sorry, this user does not exist in our database. </p> <br />
+	<p style="font-size: 18px">Sorry, this user does not exist in our
+		database.</p>
+	<br />
 	<a href="/"> Return to home </a>
 </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -267,6 +268,9 @@ public class MuralController {
 	
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
+		
+		
+		
 		RestTemplate rt = new RestTemplate(); 
 
 		//converts address to a String to use in the API request endpoint URL
@@ -280,7 +284,9 @@ public class MuralController {
 		}
 
 		//converts address to lattitude and longtitude in order to add to the database using google maps API
-		Result res = rt.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + mapkey, Result.class);
+		
+			Result res = rt.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + mapkey, Result.class);
+		
 		File file = null;
 		try {
 			file = convertMultiPartToFile(picture);
@@ -454,7 +460,6 @@ public class MuralController {
 	
 	@RequestMapping("addtofavorites")
 	public ModelAndView displayUserFavorites(@RequestParam(required=false, name="favorites[]") String favorites, @RequestParam("favoritez") Integer userid, HttpSession session) {
-		System.out.println(((User) session.getAttribute("user")).getUserid() + "hohohoho");
 		if (favorites != null) {
 			String[] favorites2 = favorites.split(",");
 			addFavorites(favorites2, userid);
