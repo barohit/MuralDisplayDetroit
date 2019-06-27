@@ -38,10 +38,12 @@ function validate() {
 		}
 }
 
-function singleInputTypeCheck() {
-	var url = document.getElementsByName("url").value;
-	var picture = document.getElementsByName("picture").value;
-	if (url != null && picture != null) {
+function InputTypeCheck() {
+
+	var picture = document.getElementsByName("picture")[0].value;
+	var address = document.getElementsByName("address")[0].value; 
+	if (picture === null || address === null) {
+		alert("Invalid");
 		return false;
 	} else {
 		return true; 

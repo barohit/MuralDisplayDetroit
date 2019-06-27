@@ -61,7 +61,7 @@ public class MuralController {
 	
 	public ArrayList<Mural> findRecommendations(HttpSession session) {
 		
-		// Gets a list of favorites for the user in question. 
+		// Gets a list of favorites for the user in question. 	
 		User user = ((User)session.getAttribute("user"));
 		Integer userid = user.getUserid();  
 		List<Favorite> userFavorites = fr.findByUserid(userid);
@@ -133,7 +133,6 @@ public class MuralController {
 		ArrayList<Mural> recs = new ArrayList<Mural>(); 
 		//the mural ids in the recommended favorite's list is converted to a list of murals
 		for (int i = 0; i < recommendedExtraMurals.size(); i++)  {
-			System.out.println(recommendedExtraMurals.get(i));
 			recs.add(mr.getOne(recommendedExtraMurals.get(i)));
 		}
 		return recs; 
@@ -165,7 +164,7 @@ public class MuralController {
 	//checking to see if the user is logged in before passing the user as an object is commonpace
 	//so an additional method was created. 
 	public void addUserSession(HttpSession session, ModelAndView mv) {
-		if (((Boolean) session.getAttribute("loggedin")) == true) {
+		if (((Boolean) session.getAttribute("loggedin")) == true) {;
 			mv.addObject("userid", ((User) session.getAttribute("user")).getUserid()); 
 		}
 	}
@@ -267,7 +266,7 @@ public class MuralController {
 	
 	
 	@RequestMapping("/upload")
-	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("url") String url, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
+	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
 		RestTemplate rt = new RestTemplate(); 
 
 		//converts address to a String to use in the API request endpoint URL
@@ -360,8 +359,11 @@ public class MuralController {
 				}
 			}
 		}
-		
-		return new ModelAndView("CheckIn", "mural", m);
+		if (m.isEmpty())  {
+			return new ModelAndView("desolate");
+		} else {
+			return new ModelAndView("CheckIn", "mural", m);
+		}
 		
 	}
 	
@@ -376,9 +378,8 @@ public class MuralController {
 		return new ModelAndView("confirmationpage"); 
 	}
 	
-	@RequestMapping("faves")
-	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
-		List<Favorite> faves = fr.findByUserid(id);
+	public ArrayList<Mural> generateFavoritesList(Integer userid) {
+		List<Favorite> faves = fr.findByUserid(userid);
 		ArrayList<Mural> faves2 = new ArrayList<Mural>(); 
 		for (int i = 0; i < faves.size(); i++) {
 			//Optional is an advanced hibernate Query class which represents the possibility of a mural 
@@ -387,8 +388,14 @@ public class MuralController {
 			// this takes a function as an argument and executes only if the mural. 
 			m.ifPresent(mural -> faves2.add(m.get()));
 		}
-		
-		return new ModelAndView("faves", "faves", faves2);
+		return faves2;
+	}
+	
+	@RequestMapping("faves")
+	public ModelAndView favoriteMuralsPerUser(@RequestParam("user") Integer id) {
+		ArrayList<Mural> faves = generateFavoritesList(id);
+
+		return new ModelAndView("faves", "faves", faves);
 	}
 	
 	@RequestMapping("logout") 
@@ -438,13 +445,19 @@ public class MuralController {
 	
 	@RequestMapping("addtofavorites")
 	public ModelAndView displayUserFavorites(@RequestParam(required=false, name="favorites[]") String favorites, @RequestParam("favoritez") Integer userid, HttpSession session) {
+		System.out.println(((User) session.getAttribute("user")).getUserid() + "hohohoho");
 		if (favorites != null) {
 			String[] favorites2 = favorites.split(",");
 			addFavorites(favorites2, userid);
 		}
-		ModelAndView mv = new ModelAndView("redirect:userpage");
-		addUserSession(session, mv); 
-		return mv; 
+		if (((Boolean)session.getAttribute("loggedin")) == true) {
+			ModelAndView mv = new ModelAndView("faves", "faves", generateFavoritesList(userid));
+			addUserSession(session, mv); 
+			return mv; 
+		} else {
+			return new ModelAndView("redirect:/");
+		}
+		
 		
 	}
 	
@@ -463,17 +476,31 @@ public class MuralController {
 	}
 	
 	@RequestMapping("addrecs")
-	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("user") Integer userid) {
-		String[] murals = muralid.split(",");
-		//parses into multiple muralids and then makes an array of integers. 
-		Integer[] muralids = new Integer[murals.length];
-		for (int i = 0; i < murals.length; i++) {
-			muralids[i] = Integer.parseInt(murals[i]);
+	public ModelAndView addRecs(HttpSession session, @RequestParam("muralid[]") String muralid, @RequestParam("userid") Integer userid) {
+		if (muralid != null) {
+			String[] murals = muralid.split(",");
+			//parses into multiple muralids and then makes an array of integers. 
+			Integer[] muralids = new Integer[murals.length];
+			for (int i = 0; i < murals.length; i++) {
+				muralids[i] = Integer.parseInt(murals[i]);
+			}
+			for (int i = 0; i < muralids.length; i++) {
+				try {
+					fr.save(new Favorite(muralids[i], userid));
+				}
+				catch (DataIntegrityViolationException e) {
+					
+				}
+			}
+			 ModelAndView mv = new ModelAndView("redirect:userpage", "user", session.getAttribute("user"));
+			 return mv; 
+		} else {
+			if ((Boolean)session.getAttribute("loggedin") == true) {
+				return new ModelAndView("userpage", "user", ((User) session.getAttribute("user")));
+			} else {
+				return new ModelAndView("/");
+			}
 		}
-		for (int i = 0; i < muralids.length; i++) {
-			fr.save(new Favorite(muralids[i], userid));
-		}
-		return new ModelAndView("redirect:/userpage", "user", session.getAttribute("user"));
 	}
 	//remove a mural from favorites
 	@RequestMapping("deletefav")
