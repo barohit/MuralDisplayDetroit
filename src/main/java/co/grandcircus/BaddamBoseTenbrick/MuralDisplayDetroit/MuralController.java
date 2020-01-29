@@ -269,8 +269,6 @@ public class MuralController {
 	@RequestMapping("/upload")
 	public ModelAndView fileUpload(@RequestParam("picture") MultipartFile picture, @RequestParam("name") String name, @RequestParam("artist") String artist, @RequestParam("address") String address, @RequestParam("neighborhood") String neighborhood) {
 		
-		
-		
 		RestTemplate rt = new RestTemplate(); 
 
 		//converts address to a String to use in the API request endpoint URL
@@ -282,7 +280,6 @@ public class MuralController {
 				add += "+";
 			}
 		}
-
 		//converts address to lattitude and longtitude in order to add to the database using google maps API
 		
 			Result res = rt.getForObject("https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + mapkey, Result.class);
@@ -308,7 +305,6 @@ public class MuralController {
 		return new ModelAndView("uploadconfirmation", "location", imgloc);
 	
 	}
-	
 	//needed because uploaded files are Multipart by default in Spring
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
 	    File convFile = new File(file.getOriginalFilename());
@@ -382,7 +378,6 @@ public class MuralController {
 		
 	}
 	
-	
 	@RequestMapping("/confirmation")
 	public ModelAndView confirmation(@RequestParam("username") String username, @RequestParam("password") String password) {
 		try {
@@ -427,8 +422,7 @@ public class MuralController {
 		Mural mural = mr.findById(rand1).orElse(null);
 
 		mv.addObject("mural", mural);
-		return mv;
-		 
+		return mv;	 
 	}
 	
 	public ArrayList<Mural> addFavorites(String[] favorites, Integer userid) {
@@ -470,11 +464,8 @@ public class MuralController {
 			return mv; 
 		} else {
 			return new ModelAndView("redirect:/");
-		}
-		
-		
+		}	
 	}
-	
 	
 	
 	@RequestMapping("recommendations")
